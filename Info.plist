@@ -28,6 +28,18 @@
 	<string>YES</string>
 	<key>NSCameraUsageDescription</key>
 	<string>YES</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>127.0.0.1:1234</key>
+			<dict/>
+			<key>NSExceptionAllowsInsecureHTTP</key>
+			<true/>
+			<key>NSIncludesSubdomains</key>
+			<true/>
+		</dict>
+	</dict>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

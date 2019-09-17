@@ -8,7 +8,16 @@
 
 import Foundation
 import UIKit
+import Alamofire
+
 class SetTattistTimeController: UIViewController{
+    
+    //앞에서 넘기는 데이터 받을 변수
+    var paramId: String = ""
+    var paramPwd: String = ""
+    var paramProfile: String = ""
+    var paramIntro: String = ""
+    var paramPlace: String = ""
     
     var availableDay = Array<String>()
     var availableTime = Array<String>()
@@ -256,6 +265,47 @@ class SetTattistTimeController: UIViewController{
         let ok = UIAlertAction(title: "확인", style: .default) {
             (action) in
             
+            
+            let param = [
+//               "tatt_time" : self.availableTime,
+//               "tatt_id" : self.paramId,
+//               "tatt_date" : self.availableDay,
+//               "tatt_work" : "",
+//               "tatt_addr" :self.paramPlace,
+//                "tatt_intro" : self.paramIntro,
+//               "tatt_profile" : self.paramProfile
+                
+                "tatt_time" : "하이",
+                "tatt_id" : "하이",
+                "tatt_date" : "하이",
+                "tatt_work" : "",
+                "tatt_addr" :"하이",
+                "tatt_intro" : "하이",
+                "tatt_profile" : "하이"
+                
+                ] as [String : Any]
+            
+            //API 호출
+            let url = "http://127.0.0.1:1234/api/join_api/"
+            let call = Alamofire.request(url, method: .post, parameters: param, encoding: JSONEncoding.default)
+            
+            //서버 응답값 처리
+            call.responseJSON { res in
+                //JSON 형식으로 값이 제대로 전달되었는지 확인
+                guard let jsonObject = res.result.value as? [String: Any] else {
+                    NSLog("서버 호출 과정에서 문제가 발생했습니다")
+                    return
+                }
+                
+//                let resultCode = jsonObject["result_code"] as! Int
+//                if resultCode == 0 {
+//                    NSLog("가입이 정상적으로 완료되었음")
+//                } else {
+//                    let errorMsg = jsonObject["error_msg"] as! String
+//                    NSLog("오류 발생 : \(errorMsg)")
+//                }
+            }
+            
             let alert2 = UIAlertController(title:"", message:"회원가입이 완료되었습니다", preferredStyle: .alert)
             
             let ok2 = UIAlertAction(title: "확인", style: .default){
@@ -277,6 +327,8 @@ class SetTattistTimeController: UIViewController{
         alert.addAction(ok)
         present(alert, animated: true, completion: nil)
     }
+    
+    
     
     
     

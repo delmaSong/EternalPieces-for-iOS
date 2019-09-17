@@ -13,7 +13,26 @@ class SetTattistInfoController: UIViewController, UIImagePickerControllerDelegat
  
    
     @IBOutlet var imgView: UIImageView!
-    @IBOutlet var introText: UITextField!
+    //@IBOutlet var introText: UITextField!
+    @IBOutlet var introText: UITextView!
+    var imgFlag = 0
+    
+    
+    //앞 화면에서 보낸 값 받기 위한 변수
+    var paramId: String = ""
+    var paramPwd: String = ""
+   
+    
+    
+    override func viewDidLoad() {
+        self.introText.layer.borderWidth = 0.5
+        self.introText.layer.borderColor = UIColor.gray.cgColor
+        self.introText.layer.masksToBounds = true
+        self.introText.layer.cornerRadius = 10.0
+        
+        NSLog("앞에서 받은 아이디 \(paramId)")
+        NSLog("앞에서 받은 비번 \(paramPwd)"   )
+    }
     
     @IBAction func pickImg(_ sender: Any) {
         
@@ -42,12 +61,13 @@ class SetTattistInfoController: UIViewController, UIImagePickerControllerDelegat
             //이미지를 이미지 뷰에 표시
             let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
             self.imgView.image = img
+            self.imgFlag = 1
         }
     }
     
     
     @IBAction func submit(_ sender: Any) {
-        if self.imgView.image == nil || self.introText.text == "" {
+        if self.imgView.image == nil || self.introText.text == "" || self.imgFlag == 0 {
             let alert = UIAlertController(title:"alert", message: "항목을 모두 입력해주세요", preferredStyle: .alert)
             
             let ok = UIAlertAction(title: "OK", style: .default)
@@ -56,9 +76,14 @@ class SetTattistInfoController: UIViewController, UIImagePickerControllerDelegat
             present(alert, animated: false)
             
         }else{
-            if let st = self.storyboard?.instantiateViewController(withIdentifier: "SetTattistPlace"){
+            if let st = self.storyboard?.instantiateViewController(withIdentifier: "SetTattistPlace") as? SetTattistPlaceController{
                 
                 st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+                
+                st.paramId = self.paramId
+                st.paramPwd = self.paramPwd
+                st.paramProfile = (self.imgView.image!.pngData()?.base64EncodedString())!
+                st.paramIntro = self.introText.text!
                 
                 self.present(st, animated: true)
             }

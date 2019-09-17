@@ -26,7 +26,6 @@ class LoginDAO{
         }
         
         let db = FMDatabase(path: dbPath)
-        print("dbPath is \(dbPath)")
         return db
     }()
     
@@ -60,7 +59,8 @@ class LoginDAO{
                 return false
             }
             record.userRole = _rs.string(forColumn: "user_role")!
-
+            
+            print("로그인 성공")
             return true
         }else{
             print("쿼리 실행 실패")

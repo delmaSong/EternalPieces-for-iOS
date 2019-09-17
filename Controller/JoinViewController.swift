@@ -22,6 +22,10 @@ class JoinViewController: UIViewController, UITextFieldDelegate{
  
     @IBOutlet var ttSwitch: UISwitch!
     
+    
+   
+    
+    
     override func viewDidLoad() {
         //화면 켜면 기본값 switch off 
         ttSwitch.isOn = false
@@ -108,9 +112,14 @@ class JoinViewController: UIViewController, UITextFieldDelegate{
             
         //모든 항목 입력 && 타투이스트
         }else if self.joinId.text != "" && self.joinPwd.text == self.joinPwd2.text && tattistFlag == true{
-            if let st = self.storyboard?.instantiateViewController(withIdentifier: "SetTattistInfo"){
+            if let st = self.storyboard?.instantiateViewController(withIdentifier: "SetTattistInfo") as? SetTattistInfoController{
+                
+                st.paramId = self.joinId.text!
+                st.paramPwd = self.joinPwd.text!
                 
                 st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+                
+               
                 
                 self.present(st, animated: true)
             }

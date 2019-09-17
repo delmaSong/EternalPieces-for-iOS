@@ -27,8 +27,8 @@ class LoginController : UIViewController, UITextFieldDelegate{
     
     //로그인 버튼 눌렀을때
     @IBAction func doLogin(_ sender: Any) {
-        var inputId = self.loginId.text
-        var inputPw = self.loginPwd.text
+        let inputId = self.loginId.text
+        let inputPw = self.loginPwd.text
 
        
         
@@ -52,7 +52,7 @@ class LoginController : UIViewController, UITextFieldDelegate{
             ad?.paramId = self.loginId.text
             ad?.paramPwd = self.loginPwd.text
             
-            if let lmc = self.storyboard?.instantiateViewController(withIdentifier: "FindStyle"){
+            if let lmc = self.storyboard?.instantiateViewController(withIdentifier: "LoginedMain"){
                 
                 lmc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
                 
