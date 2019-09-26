@@ -21,7 +21,7 @@ class SetTattistPlaceController: UIViewController, MKMapViewDelegate, CLLocation
     //앞에서 넘기는 데이터 받을 변수
     var paramId: String = ""
     var paramPwd: String = ""
-    var paramProfile: String = ""
+    var paramProfile: UIImage!
     var paramIntro: String = ""
     
     
@@ -44,7 +44,7 @@ class SetTattistPlaceController: UIViewController, MKMapViewDelegate, CLLocation
 //        self.map.setRegion(coordinateRegion, animted: true)
         
         //앞에서 넘긴거 잘 받는지 확인
-        NSLog("프로필 세팅 화면에서 받은 아이디 \(paramId) 받은 비번 \(paramPwd) 받은 셀프 소개\(paramIntro) 받은 이미지 인코딩\(paramProfile) ")
+        NSLog("프로필 세팅 화면에서 받은 아이디 \(paramId) 받은 비번 \(paramPwd) 받은 셀프 소개\(paramIntro) 받은 이미지 인코딩 \(paramProfile) ")
     }
     
 

@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import Alamofire
+
 class JoinViewController: UIViewController, UITextFieldDelegate{
     
     
@@ -90,6 +92,20 @@ class JoinViewController: UIViewController, UITextFieldDelegate{
             
         //모든 항목 입력 && 타투어
         }else if self.joinId.text != "" && self.joinPwd.text == self.joinPwd2.text && tattistFlag == false{
+            
+            //서버에 보낼 데이터
+            let param = [
+                "user_id" : self.joinId.text!,
+                "user_pw" : self.joinPwd.text!,
+                "role_tatt" : false
+            ] as [String : Any]
+            
+            //API 호출
+            let url = "http://127.0.0.1:1234/api/login_api/"
+            Alamofire.request(url, method: .post, parameters: param, encoding: JSONEncoding.default)
+            
+            
+            
             let alert = UIAlertController(title:"Alert!", message: "회원가입이 완료되었습니다 :)", preferredStyle: UIAlertController.Style.alert)
             
             let defaultAction = UIAlertAction(title: "OK", style: .default) {

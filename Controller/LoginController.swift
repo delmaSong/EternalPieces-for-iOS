@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import Alamofire
+
 class LoginController : UIViewController, UITextFieldDelegate{
     
     @IBOutlet var loginId: UITextField!
@@ -30,7 +32,13 @@ class LoginController : UIViewController, UITextFieldDelegate{
         let inputId = self.loginId.text
         let inputPw = self.loginPwd.text
 
-       
+        let params = [
+            "user_id" : inputId,
+            "user_pw" : inputPw
+        ]
+        
+        Alamofire.request("http://127.0.0.1:1234/api/login_api/", method: .post, parameters: params, encoding: JSONEncoding.default)
+        
         
         //입력 값 없으면 알럿
         if self.loginId.text == "" || self.loginPwd.text == "" {

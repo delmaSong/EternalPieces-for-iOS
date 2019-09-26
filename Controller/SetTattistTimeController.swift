@@ -15,7 +15,7 @@ class SetTattistTimeController: UIViewController{
     //앞에서 넘기는 데이터 받을 변수
     var paramId: String = ""
     var paramPwd: String = ""
-    var paramProfile: String = ""
+    var paramProfile: UIImage!
     var paramIntro: String = ""
     var paramPlace: String = ""
     
@@ -265,38 +265,81 @@ class SetTattistTimeController: UIViewController{
         let ok = UIAlertAction(title: "확인", style: .default) {
             (action) in
             
+            //user 테이블에 insert
+            let join_param = [
+                "user_id" : self.paramId,
+                "user_pw" : self.paramPwd,
+                "role_tatt" : true
+                ] as [String : Any]
+            
+            let join_url = "http://127.0.0.1:1234/api/login_api/"
+             Alamofire.request(join_url, method: .post, parameters: join_param, encoding: JSONEncoding.default)
+            
+            var times:String = ""
+            for a in self.availableTime{times += a}
+            
+            var days:String = ""
+            for b in self.availableDay {days += b}
             
             let param = [
-//               "tatt_time" : self.availableTime,
-//               "tatt_id" : self.paramId,
-//               "tatt_date" : self.availableDay,
-//               "tatt_work" : "",
-//               "tatt_addr" :self.paramPlace,
-//                "tatt_intro" : self.paramIntro,
-//               "tatt_profile" : self.paramProfile
-                
-                "tatt_time" : "하이",
-                "tatt_id" : "하이",
-                "tatt_date" : "하이",
-                "tatt_work" : "",
-                "tatt_addr" :"하이",
-                "tatt_intro" : "하이",
-                "tatt_profile" : "하이"
-                
+                "tatt_time" : times,
+               "tatt_id" : self.paramId,
+               "tatt_date" : days,
+               "tatt_work" : "hi",
+               "tatt_addr" : "hi",
+               "tatt_intro" : self.paramIntro,
+//               "tatt_profile" : self.paramProfile,
                 ] as [String : Any]
+            
+            //String -> URL
+//            let imgUrl : URL = NSURL.fileURL(withPath: self.paramProfile)
+//            do{
+//                let tmp = try String(contentsOfFile: imgUrl.path)
+//                NSLog("tmp is \(tmp)")
+//                NSLog("됨ㅁㅁㅁㅁㅁㅁ")
+//            }catch{
+//                NSLog("안됨ㅁㅁㅁㅁㅁㅁ")
+//                return
+//            }
+          
+            
+//            let imgData = self.paramProfile.jpegData(compressionQuality: 0.75)
+            let imgData = self.paramProfile.pngData()?.base64EncodedData()
+            
+           
             
             //API 호출
             let url = "http://127.0.0.1:1234/api/join_api/"
-            let call = Alamofire.request(url, method: .post, parameters: param, encoding: JSONEncoding.default)
-            
-            //서버 응답값 처리
-            call.responseJSON { res in
-                //JSON 형식으로 값이 제대로 전달되었는지 확인
-                guard let jsonObject = res.result.value as? [String: Any] else {
-                    NSLog("서버 호출 과정에서 문제가 발생했습니다")
-                    return
+            Alamofire.upload(multipartFormData: { multipartFormData in
+                for (key,value) in param {
+                    multipartFormData.append((value as! String).data(using: .utf8)!, withName:key)
                 }
-                
+//                multipartFormData.append(imgData, withName: "tatt_profile", mimeType: "image/jpg")
+//                multipartFormData.append(imgUrl, withName: "tatt_profile")
+                multipartFormData.append(imgData!, withName: "tatt_profile")
+            }, to: url, encodingCompletion: { encodingResult in
+                switch encodingResult {
+                case .success(let upload, _, _):
+                    upload.responseJSON{ response in debugPrint(response)}
+                    print("석세스래.,,,,,,,,,,,,,")
+                case .failure(let encodingError):
+                    print(encodingError)
+                    print("인코딩에러???.,,,,,,,,,,,,,")
+
+                }
+            } )
+            
+             NSLog("param id is \(self.paramId)\n param Intro is \(self.paramIntro) \n imgData is \(imgData!) \n available Time is \(times) \n available day is \(days)")
+            
+        
+//            //서버 응답값 처리
+//            call.responseJSON { res in
+//                //JSON 형식으로 값이 제대로 전달되었는지 확인
+//                guard let jsonObject = res.result.value as? [String: Any] else {
+//                    NSLog("서버 호출 과정에서 문제 발생")
+//                    return
+//                }
+//
 //                let resultCode = jsonObject["result_code"] as! Int
 //                if resultCode == 0 {
 //                    NSLog("가입이 정상적으로 완료되었음")
@@ -304,7 +347,7 @@ class SetTattistTimeController: UIViewController{
 //                    let errorMsg = jsonObject["error_msg"] as! String
 //                    NSLog("오류 발생 : \(errorMsg)")
 //                }
-            }
+//            }
             
             let alert2 = UIAlertController(title:"", message:"회원가입이 완료되었습니다", preferredStyle: .alert)
             

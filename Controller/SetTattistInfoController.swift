@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Kingfisher
 class SetTattistInfoController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate{
     
  
@@ -16,7 +17,8 @@ class SetTattistInfoController: UIViewController, UIImagePickerControllerDelegat
     //@IBOutlet var introText: UITextField!
     @IBOutlet var introText: UITextView!
     var imgFlag = 0
-    
+    var urlString = ""
+    var sendImg : UIImage!
     
     //앞 화면에서 보낸 값 받기 위한 변수
     var paramId: String = ""
@@ -55,14 +57,30 @@ class SetTattistInfoController: UIViewController, UIImagePickerControllerDelegat
     }
     
     //이미지 피커에서 이미지를 선택했을 때 호출되는 메소드
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])  {
         
         picker.dismiss(animated: false) { () in
             //이미지를 이미지 뷰에 표시
             let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
             self.imgView.image = img
             self.imgFlag = 1
+            
+            self.sendImg = img
         }
+        
+//        let imgUrl = info[UIImagePickerController.InfoKey.referenceURL] as! URL
+//
+//
+//        let imgName = imgUrl.lastPathComponent
+//        let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first as! String
+//        let localPath = (documentDirectory as NSString).appendingPathComponent(imgName)
+//
+//        let photoURL = NSURL(fileURLWithPath: localPath)
+//
+//        NSLog("photoURL is \(photoURL)")
+//
+//        self.urlString = photoURL.absoluteString!
+        
     }
     
     
@@ -80,9 +98,12 @@ class SetTattistInfoController: UIViewController, UIImagePickerControllerDelegat
                 
                 st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
                 
+            
                 st.paramId = self.paramId
                 st.paramPwd = self.paramPwd
-                st.paramProfile = (self.imgView.image!.pngData()?.base64EncodedString())!
+//                st.paramProfile = (self.imgView.image!.pngData()?.base64EncodedString())!
+                st.paramProfile = self.sendImg!
+                
                 st.paramIntro = self.introText.text!
                 
                 self.present(st, animated: true)
@@ -99,6 +120,9 @@ class SetTattistInfoController: UIViewController, UIImagePickerControllerDelegat
     @IBAction func gotoSetInfo(_segue: UIStoryboardSegue){
         
     }
+    
+    
+    
     
     
 }
