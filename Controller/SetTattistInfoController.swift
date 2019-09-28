@@ -61,25 +61,13 @@ class SetTattistInfoController: UIViewController, UIImagePickerControllerDelegat
         
         picker.dismiss(animated: false) { () in
             //이미지를 이미지 뷰에 표시
-            let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
+            let img = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
             self.imgView.image = img
             self.imgFlag = 1
             
             self.sendImg = img
         }
-        
-//        let imgUrl = info[UIImagePickerController.InfoKey.referenceURL] as! URL
-//
-//
-//        let imgName = imgUrl.lastPathComponent
-//        let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first as! String
-//        let localPath = (documentDirectory as NSString).appendingPathComponent(imgName)
-//
-//        let photoURL = NSURL(fileURLWithPath: localPath)
-//
-//        NSLog("photoURL is \(photoURL)")
-//
-//        self.urlString = photoURL.absoluteString!
+
         
     }
     
@@ -101,9 +89,7 @@ class SetTattistInfoController: UIViewController, UIImagePickerControllerDelegat
             
                 st.paramId = self.paramId
                 st.paramPwd = self.paramPwd
-//                st.paramProfile = (self.imgView.image!.pngData()?.base64EncodedString())!
                 st.paramProfile = self.sendImg!
-                
                 st.paramIntro = self.introText.text!
                 
                 self.present(st, animated: true)
