@@ -292,7 +292,7 @@ class SetTattistTimeController: UIViewController{
  
           
             
-            let imgData = self.paramProfile.jpegData(compressionQuality: 0.5)
+            let imgData = self.paramProfile.jpegData(compressionQuality: 0.7)
             
            
             

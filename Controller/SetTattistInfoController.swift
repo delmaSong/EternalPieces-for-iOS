@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import Kingfisher
+
 class SetTattistInfoController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate{
     
  
