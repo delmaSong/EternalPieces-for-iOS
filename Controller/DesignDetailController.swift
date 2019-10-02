@@ -13,7 +13,8 @@ import Kingfisher
 
 class DesignDetailController: UIViewController {
     
-    
+    //수정버튼 (추후 작성자만 보이도록 수정 필요)
+    @IBOutlet var editBtn: UIButton!
     //상단에 보이는 타티스트 아이디
     @IBOutlet var tattistId1: UILabel!
     //중앙에 담기는 타티스트 아이디
@@ -39,7 +40,6 @@ class DesignDetailController: UIViewController {
     //도안 업로드에서 들어오는건지, 스타일찾기에서 들어오는건지에 따라 분기해줄 필요 있음 
     override func viewDidLoad() {
        super.viewDidLoad()
-        print("designId is \(designId)")
         let url = "http:127.0.0.1:1234/api/upload-design/"
         let doNetwork = Alamofire.request(url+String(designId))
         doNetwork.responseJSON{(response) in
@@ -78,9 +78,38 @@ class DesignDetailController: UIViewController {
         }
     }
     
+    //뒤로가기
     @IBAction func back(_ sender: Any) {
         self.presentingViewController?.dismiss(animated: true)
     }
+    
+    
+    @IBAction func doEdit(_ sender: Any) {
+        //수정인지 삭제인지 선택하는 알럿
+        let actionSheet = UIAlertController(title: "", message: "필요한 기능을 선택해주세요", preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title:"수정", style: .default, handler: { result in
+            //수정하는 화면으로 이동
+            if let st = self.storyboard?.instantiateViewController(withIdentifier: "UploadDesign") as? UploadDesignController{
+                
+                st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+                st.editFlag = true      //수정하기위해 넘어간다는 플래그
+                st.editId = self.designId    //수정하는 도안 아이디 전달
+                
+                self.present(st, animated: true)
+            }
+        }))
+        actionSheet.addAction(UIAlertAction(title:"삭제", style: .default, handler: { result in
+            //정말 삭제할거냐고 다시한번 알럿
+        }))
+        actionSheet.addAction(UIAlertAction(title:"취소", style: .cancel, handler: nil))
+        self.present(actionSheet, animated: true, completion: nil)
+        
+    }
+    
+    
+    
+    
+    
 }
 
 

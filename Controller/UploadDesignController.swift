@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import Alamofire
-
+import Kingfisher
 class UploadDesignController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPickerViewDelegate, UIPickerViewDataSource{
  
     
@@ -25,8 +25,10 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
     
     var imgData: Data!       //서버로 넘어갈 이미지 압축 파일 변수
     var designId: Int! //도안 디테일 뷰로 넘어갈 아이디 변수
-    
+    var editFlag: Bool = false      //수정하려고 온건지 확인하는 변수. true일때 수정할 데이터 불러와야 함
+    var editId: Int!        //수정할 도안이 가진 아이디
     override func viewDidLoad() {
+        super.viewDidLoad()
         //텍스트필드 선 두께, 컬러, 굴곡 설정
         self.txt_desc.layer.borderWidth = 0.5
         self.txt_desc.layer.borderColor = UIColor.gray.cgColor
@@ -38,6 +40,49 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
         
         //피커뷰 미선택시 디폴트로 가장앞에 있는거 자동 선택
         pickerView(pick_style, didSelectRow: 0, inComponent: 0)
+        
+        //수정하기위해 화면 들어온거라면
+        if self.editFlag == true {
+            
+            //서버에서
+            let url = "http:127.0.0.1:1234/api/upload-design/"
+            let doNetwork = Alamofire.request(url+String(editId))
+            //데이터 불러와서
+            doNetwork.responseJSON{(response) in
+                switch response.result{
+                case .success(let obj):
+                    if obj is NSDictionary{
+                        do{
+                            let dataJSON = try JSONSerialization.data(withJSONObject: obj, options: .prettyPrinted)
+                            let respData = try JSONDecoder().decode(DesignVO.self, from: dataJSON)
+                            //각 항목에 셋팅해준다
+                            self.txt_title.text = respData.design_name
+                            self.txt_size.text = (respData.design_size ?? 0).description
+                            self.txt_price.text = (respData.design_price ?? 0).description
+                            self.txt_spend_time.text = (respData.design_spent_time ?? 0).description
+                            self.txt_desc.text = respData.design_desc
+                            
+                            //kingfisher로 이미지 세팅
+                            let url = "http:127.0.0.1:1234"
+                            let imgURL = URL(string: url+respData.design_photo!)
+                            self.img_photo.kf.setImage(with: imgURL)
+                            
+                            //기존 선택한 스타일에 맞게 피커뷰 셋팅
+                            let seq = self.style_list.firstIndex(of: respData.design_style!)
+                            self.pickerView(self.pick_style, didSelectRow: seq!, inComponent: 0)
+                            
+
+                        }catch{
+                            print(error.localizedDescription)
+                        }
+                    }
+                case .failure(let e):
+                    //통신 실패
+                    print(e.localizedDescription)
+                }
+                
+            }
+        }
     }
     
     

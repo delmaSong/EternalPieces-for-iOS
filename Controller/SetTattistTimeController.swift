@@ -317,7 +317,7 @@ class SetTattistTimeController: UIViewController{
             } )
             
          
-            
+            //완료 알림
             let alert2 = UIAlertController(title:"", message:"회원가입이 완료되었습니다", preferredStyle: .alert)
             
             let ok2 = UIAlertAction(title: "확인", style: .default){
