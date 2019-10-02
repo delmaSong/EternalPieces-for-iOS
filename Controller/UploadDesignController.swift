@@ -24,6 +24,7 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet var pick_style: UIPickerView!     //도안 스타일
     
     var imgData: Data!       //서버로 넘어갈 이미지 압축 파일 변수
+    var designId: Int! //도안 디테일 뷰로 넘어갈 아이디 변수
     
     override func viewDidLoad() {
         //텍스트필드 선 두께, 컬러, 굴곡 설정
@@ -150,12 +151,34 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
             }, to: url, encodingCompletion: { encodingResult in
                     switch encodingResult {
                     case .success(let upload, _, _):
-                        upload.responseJSON{ response in debugPrint(response)}
+                        upload.responseJSON{ response in
+                            debugPrint(response.result.value!)
+                            if let nsDictionary = response.result.value as? NSDictionary{
+                                if let id = nsDictionary["id"] as? Int{
+                                    self.designId = id
+                                }
+                            }
+                        }
                     case .failure(let encodingError):
                         print(encodingError)
                     }
-                    
             })
+            
+            let alert = UIAlertController(title: "", message: "도안 업로드가 완료되었습니다", preferredStyle: .alert)
+            let ok = UIAlertAction(title: "확인", style: .default){
+                action in
+                if let st = self.storyboard?.instantiateViewController(withIdentifier: "DesignDetailView") as? DesignDetailController{
+                    
+                    //업로드한 도안 아이디를 다음 화면으로 전달
+                    st.designId = self.designId!
+                    st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+                    
+                    
+                    self.present(st, animated: true)
+                }
+            }
+            alert.addAction(ok)
+            self.present(alert, animated: true)
 
             
         }
@@ -167,3 +190,6 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
         self.dismiss(animated: false)
     }
 }
+
+
+
