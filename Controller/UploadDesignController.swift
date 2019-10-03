@@ -27,6 +27,8 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
     var designId: Int! //도안 디테일 뷰로 넘어갈 아이디 변수
     var editFlag: Bool = false      //수정하려고 온건지 확인하는 변수. true일때 수정할 데이터 불러와야 함
     var editId: Int!        //수정할 도안이 가진 아이디
+    var pickedRow: Int!     //수정시 선택된 스타일 로우 가질 변수
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //텍스트필드 선 두께, 컬러, 굴곡 설정
@@ -62,6 +64,9 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
                             self.txt_spend_time.text = (respData.design_spent_time ?? 0).description
                             self.txt_desc.text = respData.design_desc
                             
+                            //designId 지정
+                            self.designId = self.editId!
+                            
                             //kingfisher로 이미지 세팅
                             let url = "http:127.0.0.1:1234"
                             let imgURL = URL(string: url+respData.design_photo!)
@@ -70,8 +75,7 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
                             //기존 선택한 스타일에 맞게 피커뷰 셋팅
                             let seq = self.style_list.firstIndex(of: respData.design_style!)
                             self.pickerView(self.pick_style, didSelectRow: seq!, inComponent: 0)
-                            
-
+                            self.pickedRow = seq!
                         }catch{
                             print(error.localizedDescription)
                         }
@@ -85,6 +89,12 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        
+        if editFlag {   //수정하러 들어온거면 전에 선택한 스타일대로 피커뷰 세팅
+            self.pick_style.selectRow(self.pickedRow, inComponent: 0, animated: false)
+        }
+    }
     
     //피커뷰에 담길 스타일 분류 데이터
     var style_list = ["레터링", "수채화", "올드스쿨", "이레즈미", "블랙앤그레이", "커버업"]
@@ -187,13 +197,17 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
                 "design_desc" : self.txt_desc.text!,
                 "tatt_id" : "1111"      //로그인 기능 구현 후 수정 요망
                 ] as [String : Any]
-            let url = "http://127.0.0.1:1234/api/upload-design/"
-            Alamofire.upload(multipartFormData: {multipartFormData in
-                for (key,value) in params {
-                multipartFormData.append((value as! String).data(using: .utf8)!, withName: key)
-                }
-                multipartFormData.append(self.imgData!, withName: "design_photo", fileName: "photo.jpg", mimeType: "jpg/png")
-            }, to: url, encodingCompletion: { encodingResult in
+            
+            var url: String!
+            if editFlag == false{   //도안 업로드하기위해 들어온거면
+                url = "http://127.0.0.1:1234/api/upload-design/"
+                
+                Alamofire.upload(multipartFormData: {multipartFormData in
+                    for (key,value) in params {
+                        multipartFormData.append((value as! String).data(using: .utf8)!, withName: key)
+                    }
+                    multipartFormData.append(self.imgData!, withName: "design_photo", fileName: "photo.jpg", mimeType: "jpg/png")
+                }, to: url!, encodingCompletion: { encodingResult in
                     switch encodingResult {
                     case .success(let upload, _, _):
                         upload.responseJSON{ response in
@@ -207,7 +221,34 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
                     case .failure(let encodingError):
                         print(encodingError)
                     }
-            })
+                })
+                
+            }else{      //editFlag == true 도안 수정하기 위한거면
+                url = "http://127.0.0.1:1234/api/upload-design/" + String(editId!) + "/"
+                print("url is \(url)")
+                let headers = [
+                    "Content-Type" : "multipart/form-data"
+                ]
+                
+                //서버 호출
+                Alamofire.upload(multipartFormData: {multipartFormData in
+                    for (key,value) in params {
+                        multipartFormData.append((value as! String).data(using: .utf8)!, withName: key)
+                    }
+                          multipartFormData.append(self.imgData!, withName: "design_photo", fileName: "photo.jpg", mimeType: "image/jpeg")
+                    
+                }, usingThreshold: UInt64.init(), to: url!, method: .put, headers: headers) { result in
+                    switch result {
+                    case .success(let upload, _, _):
+                        upload.responseJSON{ response in
+                            debugPrint(response.result.value!)  }
+                    case .failure(let error):
+                        print(error)
+                    }//end switch
+                }
+            }
+            
+           
             
             let alert = UIAlertController(title: "", message: "도안 업로드가 완료되었습니다", preferredStyle: .alert)
             let ok = UIAlertAction(title: "확인", style: .default){
@@ -217,18 +258,20 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
                     //업로드한 도안 아이디를 다음 화면으로 전달
                     st.designId = self.designId!
                     st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
-                    
-                    
+                   
                     self.present(st, animated: true)
                 }
             }
             alert.addAction(ok)
             self.present(alert, animated: true)
-
-            
-        }
         
-    }
+        
+        }//else문 닫기
+        
+        
+        
+        
+    }//메소드 닫기
     
     //취소
     @IBAction func go_back(_ sender: UIButton) {
