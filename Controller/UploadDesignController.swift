@@ -71,6 +71,7 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
                             let url = "http:127.0.0.1:1234"
                             let imgURL = URL(string: url+respData.design_photo!)
                             self.img_photo.kf.setImage(with: imgURL)
+                            self.imgData = try? Data(contentsOf: imgURL!)
                             
                             //기존 선택한 스타일에 맞게 피커뷰 셋팅
                             let seq = self.style_list.firstIndex(of: respData.design_style!)
@@ -225,7 +226,6 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
                 
             }else{      //editFlag == true 도안 수정하기 위한거면
                 url = "http://127.0.0.1:1234/api/upload-design/" + String(editId!) + "/"
-                print("url is \(url)")
                 let headers = [
                     "Content-Type" : "multipart/form-data"
                 ]
@@ -248,7 +248,6 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
                 }
             }
             
-           
             
             let alert = UIAlertController(title: "", message: "도안 업로드가 완료되었습니다", preferredStyle: .alert)
             let ok = UIAlertAction(title: "확인", style: .default){

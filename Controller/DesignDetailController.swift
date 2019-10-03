@@ -100,6 +100,21 @@ class DesignDetailController: UIViewController {
         }))
         actionSheet.addAction(UIAlertAction(title:"삭제", style: .default, handler: { result in
             //정말 삭제할거냐고 다시한번 알럿
+            let alert = UIAlertController(title: "", message: "정말 삭제하시겠습니까?", preferredStyle: .alert)
+            let ok = UIAlertAction(title: "확인", style: .default){
+                action in
+                //서버 호출
+                let deleteURL = "http:127.0.0.1:1234/api/upload-design/" + String(self.designId) + "/"
+                Alamofire.request(deleteURL, method: .delete)
+                
+                //다른 화면으로 이동
+                //타티스트 페이지로 or 더보기 탭 
+            }
+            let cancel = UIAlertAction(title: "취소", style: .cancel)
+            alert.addAction(ok)
+            alert.addAction(cancel)
+            self.present(alert, animated: true)
+            
         }))
         actionSheet.addAction(UIAlertAction(title:"취소", style: .cancel, handler: nil))
         self.present(actionSheet, animated: true, completion: nil)
