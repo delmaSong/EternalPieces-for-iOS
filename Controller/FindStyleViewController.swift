@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Alamofire
+import Kingfisher
 
 class FindStyleViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate{
     
@@ -16,11 +17,12 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
     var selectedKey = ""    //버튼 선택시 서버 넘길 키워드
     
     //서버에서 json list 받을 튜플
-      var dataTuple : (tId: String, tDesc: String, dPhoto: String, dId: Int) = ("", "", "", 0)
-      //서버에서 json list 받을 어레이. 어레이 속에 튜플 들어간 구조
-      var dataArray :[(String, String, String, Int)] = []
-      //어레이 인서트시 사용할 인덱스
-      var num:Int = 0
+    var dataTuple : (tId: String, tDesc: String, dPhoto: String, dId: Int) = ("", "", "", 0)
+    //서버에서 json list 받을 어레이. 어레이 속에 튜플 들어간 구조
+    var dataArray :[(String, String, String, Int)] = []
+    //어레이 인서트시 사용할 인덱스
+    var num:Int = 0
+    //컬렉션뷰에 넣어줄 데이터 리스트
     var list: [FindStyleVO] = []
     
     
@@ -98,7 +100,6 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
         doNetwork.responseJSON{(response) in
             switch response.result{
             case .success(let obj):
-                NSLog("통신 성공")
                 if let nsArray = obj as? NSArray{       //array 벗김
                     for bundle in nsArray {
                         if let nsDictionary = bundle as? NSDictionary{         //dictionary 벗겨서 튜플에 각 데이터 삽입
@@ -126,7 +127,7 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
                       var fvo = FindStyleVO()
                       fvo.tatt_id = tId
                       fvo.design_desc = tDesc
-                      fvo.design_photo = "codog.jpeg"
+                      fvo.design_photo = dPhoto
                       fvo.design_id = dId
                                            
                       datalist.append(fvo)
@@ -143,11 +144,7 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
 
     //셀 몇개나 보여줄건지
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        for a in self.list {
-            print("list is \(a)")
-        }
-        NSLog("self.list.count is \(self.list.count)")
-        NSLog("self.dataArray.count is \(self.dataArray.count)")
+        
         return self.list.count
     }
 
@@ -156,8 +153,11 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
         let row = self.list[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FindStyleCell", for: indexPath) as! FindStyleCell
 
+        let imgURL = URL(string: row.design_photo!)
+       
+        //각 셀에 데이터 삽입
         cell.tattistId?.text = row.tatt_id
-        cell.design.image = UIImage(named: row.design_photo!)
+        cell.design.kf.setImage(with:imgURL)    //킹피셔 이용한 이미지 삽입
         cell.desc?.text = row.design_desc
 
         return cell
@@ -179,7 +179,7 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
 
 
 
-}//class 
+}//class
 
 
 
