@@ -8,9 +8,9 @@
 
 import Foundation
 
-class FindStyleVO {
-    var design: String?              //도안 사진
-    var tattistId: String?           //타티스트 아이디
-    var description: String?         //도안 설명
-    
+struct FindStyleVO: Codable {
+    var design_photo: String?              //도안 사진
+    var tatt_id: String?           //타티스트 아이디
+    var design_desc: String?         //도안 설명
+    var design_id: Int?             //도안 아이디
 }

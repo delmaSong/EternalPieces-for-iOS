@@ -108,7 +108,7 @@ class DesignDetailController: UIViewController {
                 Alamofire.request(deleteURL, method: .delete)
                 
                 //다른 화면으로 이동
-                //타티스트 페이지로 or 더보기 탭 
+                //타티스트 페이지로 or 더보기 탭
             }
             let cancel = UIAlertAction(title: "취소", style: .cancel)
             alert.addAction(ok)
