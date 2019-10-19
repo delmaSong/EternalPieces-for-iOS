@@ -120,6 +120,7 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
                 print(e.localizedDescription)
             }
           
+            //컬렉션셀에 넣어줄 데이터 준비
             self.list = {
                   var datalist = [FindStyleVO]()
 
@@ -168,8 +169,14 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
     //셀 클릭시 이벤트
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         NSLog("선택된 행은 \(indexPath.row)번째 행입니다")
-        if let lmc = self.storyboard?.instantiateViewController(withIdentifier: "DesignDetailView"){
+        let row = self.list[indexPath.row]
+        
+        if let lmc = self.storyboard?.instantiateViewController(withIdentifier: "DesignDetailView") as? DesignDetailController{
             lmc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+            
+            //도안 id값 전달
+            lmc.designId = row.design_id!
+            print("넘어가는 도안 id 값은 \(row.design_id!)")
             self.present(lmc, animated: true)
         }
         

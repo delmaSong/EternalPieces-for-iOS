@@ -36,6 +36,8 @@ class DesignDetailController: UIViewController {
     
     //앞에서 보내는 도안 아이디 받을 변수
     var designId: Int = 0
+    //예약하기 화면에 보내줄 타티스트 아이디
+    var tatt_id: String = ""
     
     //도안 업로드에서 들어오는건지, 스타일찾기에서 들어오는건지에 따라 분기해줄 필요 있음 
     override func viewDidLoad() {
@@ -60,6 +62,7 @@ class DesignDetailController: UIViewController {
                         self.price.text = (respData.design_price ?? 0).description
                         self.spentTime.text = (respData.design_spent_time ?? 0).description
                         self.design_desc.text = respData.design_desc
+                        self.tatt_id = respData.tatt_id!
                         
                         //kingfisher 이용해 이미지 불러와서 적용
                         let url = "http:127.0.0.1:1234"
@@ -84,6 +87,7 @@ class DesignDetailController: UIViewController {
     }
     
     
+    //edit버튼 선택시
     @IBAction func doEdit(_ sender: Any) {
         //수정인지 삭제인지 선택하는 알럿
         let actionSheet = UIAlertController(title: "", message: "필요한 기능을 선택해주세요", preferredStyle: .actionSheet)
@@ -120,6 +124,31 @@ class DesignDetailController: UIViewController {
         self.present(actionSheet, animated: true, completion: nil)
         
     }
+    
+    
+    
+    //상담하기 버튼 선택시
+    @IBAction func doChat(_ sender: Any) {
+    }
+    
+    
+    //예약하기 버튼 선택시 
+    @IBAction func doBook(_ sender: Any) {
+        //예약하기 화면으로 이동 
+        if let st = self.storyboard?.instantiateViewController(withIdentifier: "BookingView") as? BookingController{
+                       
+                       st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+                        st.designNum = self.designId
+            st.tattId = self.tatt_id
+                       
+                       self.present(st, animated: true)
+        }
+    
+    
+    
+    
+    }
+    
     
     
     

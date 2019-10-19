@@ -8,15 +8,16 @@
 
 import Foundation
 import UIKit
-import MapKit
-import CoreLocation
 
-class SetTattistPlaceController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate{
+
+class SetTattistPlaceController: UIViewController, MTMapViewDelegate{
     
-    @IBOutlet var mapView: MKMapView!
+    //맵뷰
+//    var mapView = MTMapView()
+    
+    //위치검색 옆 텍스트 입력란
     @IBOutlet var placeTxt: UITextField!
     
-    let locationMgr = CLLocationManager()
     
     //앞에서 넘기는 데이터 받을 변수
     var paramId: String = ""
@@ -29,19 +30,15 @@ class SetTattistPlaceController: UIViewController, MKMapViewDelegate, CLLocation
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.locationMgr.delegate = self
-        self.locationMgr.desiredAccuracy = kCLLocationAccuracyBest
-        self.locationMgr.requestWhenInUseAuthorization()
-        self.locationMgr.startUpdatingLocation()
-        
-        self.mapView.showsUserLocation = true
-//        let lat = (param?["위도"] as! NSString).doubleValue
-//        let lng = (param?["경도"] as! NSString).doubleValue
-//
-//        let location = CLLocationCoordinate2D(latitude: lat, longitude: lng)
-//        let regionRadius: CLLocationDistance = 100
-//        let coordinateRegion = MKCoordinateRegion(center: location, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-//        self.map.setRegion(coordinateRegion, animted: true)
+   
+//        self.mapView.frame = CGRect(x: 100, y:100, width:  self.view.frame.width, height: 50)
+//        self.view.addSubview(mapView)
+//        self.mapView = MTMapView(frame: self.view.bounds)
+//        if let mapView = mapView{
+//            mapView.delegate = self
+//            mapView.baseMapType = .standard
+//            self.view.addSubview(mapView)
+//        }
         
         //앞에서 넘긴거 잘 받는지 확인
         NSLog("프로필 세팅 화면에서 받은 아이디 \(paramId) 받은 비번 \(paramPwd) 받은 셀프 소개\(paramIntro) 받은 이미지 인코딩 \(paramProfile) ")
@@ -51,12 +48,13 @@ class SetTattistPlaceController: UIViewController, MKMapViewDelegate, CLLocation
     
 
 
-    
+    //찾기 버튼 클릭시
     @IBAction func findPlace(_ sender: Any) {
+        //입력한 주소를 위도와 경도 값으로 변환해야 함
     }
     
     
-    
+    //확인 버튼 클릭시
     @IBAction func submit(_ sender: Any) {
         if let st = self.storyboard?.instantiateViewController(withIdentifier: "SetTattistTime") as? SetTattistTimeController{
             
@@ -82,6 +80,7 @@ class SetTattistPlaceController: UIViewController, MKMapViewDelegate, CLLocation
         view.endEditing(true)
     }
     
+    //취소 버튼 클릭시
     @IBAction func gotoSetPlace(_segue: UIStoryboardSegue){
         
     }

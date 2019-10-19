@@ -10,6 +10,7 @@
 import Foundation
 
 struct DesignVO: Codable{
+    var id: Int?
     var design_name: String?
     var design_price: Int?
     var design_size: Int?
