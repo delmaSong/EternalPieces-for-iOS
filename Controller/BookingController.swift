@@ -148,7 +148,7 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
        
         //현재 기준 과거일경우 버튼 선택 불가
         //월요일 버튼
-        if now.timeIntervalSince(startOfWeek!) >= 0 {
+        if now.timeIntervalSince(startOfWeek!) >= 0 || !self.dateTxt.contains("월"){
             self.mon.isEnabled = false
             self.mon.setTitleColor(.gray, for: .normal)
         }else{
@@ -157,7 +157,7 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
         }
         
         //화요일
-        if now.timeIntervalSince(thisTue) >= 0 {
+        if now.timeIntervalSince(thisTue) >= 0 || !self.dateTxt.contains("화"){
             self.tue.isEnabled = false
             self.tue.setTitleColor(.gray, for: .normal)
         }else{
@@ -165,7 +165,7 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
             self.tue.setTitleColor(.black, for: .normal)
         }
         //수요일
-        if now.timeIntervalSince(thisTue) >= 0 {
+        if now.timeIntervalSince(thisTue) >= 0 || !self.dateTxt.contains("수"){
             self.wed.isEnabled = false
             self.wed.setTitleColor(.gray, for: .normal)
         }else{
@@ -173,7 +173,7 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
             self.wed.setTitleColor(.black, for: .normal)
         }
         //목요일
-        if now.timeIntervalSince(thisTue) >= 0 {
+        if now.timeIntervalSince(thisTue) >= 0 || !self.dateTxt.contains("목"){
             self.thu.isEnabled = false
             self.thu.setTitleColor(.gray, for: .normal)
         }else{
@@ -181,7 +181,7 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
             self.thu.setTitleColor(.black, for: .normal)
         }
         //금요일
-        if now.timeIntervalSince(thisTue) >= 0 {
+        if now.timeIntervalSince(thisTue) >= 0 || !self.dateTxt.contains("금"){
             self.fri.isEnabled = false
             self.fri.setTitleColor(.gray, for: .normal)
         }else{
@@ -189,7 +189,7 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
             self.fri.setTitleColor(.black, for: .normal)
         }
         //토요일
-        if now.timeIntervalSince(thisTue) >= 0 {
+        if now.timeIntervalSince(thisTue) >= 0 || !self.dateTxt.contains("토"){
             self.sat.isEnabled = false
             self.sat.setTitleColor(.gray, for: .normal)
         }else{
@@ -197,7 +197,7 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
             self.sat.setTitleColor(.black, for: .normal)
         }
         //일요일
-        if now.timeIntervalSince(thisTue) >= 0 {
+        if now.timeIntervalSince(thisTue) >= 0 || !self.dateTxt.contains("일"){
             self.sun.isEnabled = false
             self.sun.setTitleColor(.gray, for: .normal)
         }else{
@@ -335,15 +335,8 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
                             }
                         }
                     }
-               
-                        
-                        //데이터 가져오기
-//                        self.timeTxt = respData.tatt_time!
-//                        self.dateTxt = respData.tatt_date!
-                   
 
                 }
-                print("obj is not array~~~~~~~~~~~~`")
 
             case .failure(let e):   //통신 실패
                 print(e.localizedDescription)
@@ -356,6 +349,7 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
             //통신후 컬렉션뷰 리로드
             self.collectionView.reloadData()
             self.timeArray = self.timeTxt.components(separatedBy: "시")
+          
             
             //컬렉션셀에 넣어줄 데이터 준비
             self.list = {
@@ -382,7 +376,7 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
         return self.timeArray.count-1
       }
       
-    //뭐라고 넣어줄건지
+    //셀에 데이터 세팅
       func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let row = self.list[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BookingTimeCell", for: indexPath) as! BookingTimeCell
@@ -393,8 +387,10 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
         return cell
       }
     
-    
-    
+    //셀 클릭시 이벤트
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("\(indexPath.row) 시간을 선택하였다")
+    }
     
     
     
