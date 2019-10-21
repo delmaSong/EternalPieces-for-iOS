@@ -30,11 +30,12 @@ class SetTattistPlaceController: UIViewController, MTMapViewDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
    
 //        self.mapView.frame = CGRect(x: 100, y:100, width:  self.view.frame.width, height: 50)
 //        self.view.addSubview(mapView)
 //        self.mapView = MTMapView(frame: self.view.bounds)
-//        if let mapView = mapView{
+//        if let mapView = mapView as MTMapView? {
 //            mapView.delegate = self
 //            mapView.baseMapType = .standard
 //            self.view.addSubview(mapView)

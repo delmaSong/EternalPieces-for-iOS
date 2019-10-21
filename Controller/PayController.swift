@@ -10,6 +10,14 @@ import UIKit
 
 class PayController: UIViewController{
     
+    //앞에서 넘기는 예약정보 받을 변수
+    var selectedDate = ""
+    var designName = ""
+    var designSpentTime = ""
+    var bodyPart = ""
+    var selectedSize = ""
+    var selectedTime = ""
+    
     override func viewDidLoad() {
         
     }

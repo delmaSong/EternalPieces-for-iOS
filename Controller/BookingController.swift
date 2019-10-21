@@ -56,7 +56,8 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
     @IBOutlet var pickSize: UIPickerView!
     //피커뷰로 선택한 사이즈
     var selectedSize = ""
-    
+    //선택한 시간대
+    var selectedTime = ""
     
 
     
@@ -98,26 +99,42 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
         pickerView(pickBodyPart, didSelectRow: 0, inComponent: 0)
         pickerView(pickSize, didSelectRow: 0, inComponent: 0)
         
-        //이번주 월요일 날짜 가져옴
-        setDate(date:now)
-        
-        //도안데이터 세팅
-        getDesignData()
         //타티스트 데이터 세팅
         getTattistData()
-        
-        
-        
+        print("타티스트 데이터 세팅 후 self.dateTxt is \(self.dateTxt)")
+        //이번주 월요일 날짜 가져옴
+        setDate(date:now)
+        print("날짜 세팅 후 self.dateTxt is \(self.dateTxt)")
+
+        //도안데이터 세팅
+        getDesignData()
     }
     
+    
+    
+
 
     
     //오늘 날짜
     var stdWeek = Date()
     let now = Date()
     
+    //각 요일에 담아줄 날짜값
+    var monDate = ""
+    var tueDate = ""
+    var wedDate = ""
+    var thuDate = ""
+    var friDate = ""
+    var satDate = ""
+    var sunDate = ""
+    
     //이번주 월요일 기반으로 들어갈 값 계산
     func setDate(date:Date){
+        
+        //데이터 포맷 형식
+        let longFormatter = DateFormatter()
+        longFormatter.dateFormat = "YYYY년 MM월 dd일"
+        
            //날짜 형식 세팅
            let dateFormatter = DateFormatter()
            dateFormatter.dateFormat = "dd"
@@ -154,6 +171,7 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
         }else{
             self.mon.isEnabled = true
             self.mon.setTitleColor(.black, for: .normal)
+            self.monDate = longFormatter.string(from: startOfWeek!) //해당 날짜의 풀 형식 yyyy년 mm월 dd일
         }
         
         //화요일
@@ -163,46 +181,56 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
         }else{
             self.tue.isEnabled = true
             self.tue.setTitleColor(.black, for: .normal)
+            self.tueDate = longFormatter.string(from: thisTue)
         }
         //수요일
-        if now.timeIntervalSince(thisTue) >= 0 || !self.dateTxt.contains("수"){
+        print("now is \(now)")
+        print("thisWed is \(thisWed)")
+        print("now.timeIntervalSince is \(now.timeIntervalSince(thisWed))")
+        print("self.dateTxt is \(self.dateTxt)")
+        if now.timeIntervalSince(thisWed) >= 0 || !self.dateTxt.contains("수"){
             self.wed.isEnabled = false
             self.wed.setTitleColor(.gray, for: .normal)
         }else{
             self.wed.isEnabled = true
             self.wed.setTitleColor(.black, for: .normal)
+            self.wedDate = longFormatter.string(from: thisWed)
         }
         //목요일
-        if now.timeIntervalSince(thisTue) >= 0 || !self.dateTxt.contains("목"){
+        if now.timeIntervalSince(thisThu) >= 0 || !self.dateTxt.contains("목"){
             self.thu.isEnabled = false
             self.thu.setTitleColor(.gray, for: .normal)
         }else{
             self.thu.isEnabled = true
             self.thu.setTitleColor(.black, for: .normal)
+            self.thuDate = longFormatter.string(from: thisThu)
         }
         //금요일
-        if now.timeIntervalSince(thisTue) >= 0 || !self.dateTxt.contains("금"){
+        if now.timeIntervalSince(thisFri) >= 0 || !self.dateTxt.contains("금"){
             self.fri.isEnabled = false
             self.fri.setTitleColor(.gray, for: .normal)
         }else{
             self.fri.isEnabled = true
             self.fri.setTitleColor(.black, for: .normal)
+            self.friDate = longFormatter.string(from: thisFri)
         }
         //토요일
-        if now.timeIntervalSince(thisTue) >= 0 || !self.dateTxt.contains("토"){
+        if now.timeIntervalSince(thisSat) >= 0 || !self.dateTxt.contains("토"){
             self.sat.isEnabled = false
             self.sat.setTitleColor(.gray, for: .normal)
         }else{
             self.sat.isEnabled = true
             self.sat.setTitleColor(.black, for: .normal)
+            self.satDate = longFormatter.string(from: thisSat)
         }
         //일요일
-        if now.timeIntervalSince(thisTue) >= 0 || !self.dateTxt.contains("일"){
+        if now.timeIntervalSince(thisSun) >= 0 || !self.dateTxt.contains("일"){
             self.sun.isEnabled = false
             self.sun.setTitleColor(.gray, for: .normal)
         }else{
             self.sun.isEnabled = true
             self.sun.setTitleColor(.black, for: .normal)
+            self.sunDate = longFormatter.string(from: thisSun)
         }
 
        }
@@ -236,32 +264,77 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
     
     //월요일 선택
     @IBAction func selectMon(_ sender: Any) {
-//        self.selectedDate!.text =
+        self.selectedDate!.text = self.monDate + " 월요일"
     }
     //화요일 선택
     @IBAction func selectTue(_ sender: Any) {
-    }
+        self.selectedDate!.text = self.tueDate + " 화요일"
+}
     //수요일 선택
     @IBAction func selectWed(_ sender: Any) {
+        self.selectedDate!.text = self.wedDate + " 수요일"
     }
     //목요일 선택
     @IBAction func selectThu(_ sender: Any) {
+        self.selectedDate!.text = self.thuDate + " 목요일"
     }
     //금요일 선택
     @IBAction func selectFri(_ sender: Any) {
+        self.selectedDate!.text = self.friDate + " 금요일"
     }
     //토요일 선택
     @IBAction func selectSat(_ sender: Any) {
+        self.selectedDate!.text = self.satDate + " 토요일"
     }
     //일요일 선택
     @IBAction func selectSun(_ sender: Any) {
-    }
+        self.selectedDate!.text = self.sunDate + " 일요일"
+}
     
     
+    
+
     
     
     //예약하기 버튼. 결제창으로 이동
     @IBAction func doBook(_ sender: Any) {
+        
+        if self.selectedDate.text == nil || self.selectedTime == "" {
+          
+                     let alert = UIAlertController(title:"알림!", message: "항목을 모두 선택해주세요", preferredStyle: .alert)
+                     let defaultAction = UIAlertAction(title: "OK", style: .default){
+                         (action) in
+                     }
+                     alert.addAction(defaultAction)
+                     present(alert, animated: true, completion: nil)
+        }else {
+            let alert = UIAlertController(title: "선택한 정보를 확인해주세요", message: "\(self.selectedDate.text!), \(self.selectedTime), \(self.selectedBodyPart), \(self.selectedSize)", preferredStyle: .alert)
+            let defaultAction = UIAlertAction(title: "확인", style: .default){
+                (action) in
+                if let st = self.storyboard?.instantiateViewController(withIdentifier: "PayView") as? PayController{
+                                               
+                                               st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+                                               
+                                               //예약정보 취합해 결제화면으로 전달
+                                               //선택된 날짜와 요일
+                                               st.selectedDate = self.selectedDate.text!
+                                               //도안 이름
+                                               st.designName = self.designName.text!
+                                               st.bodyPart = self.selectedBodyPart
+                                               st.selectedSize = self.selectedSize
+                                               st.selectedTime = self.selectedTime
+                                               
+                                           
+                                               self.present(st, animated: true)
+                                           }
+            }
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+            alert.addAction(cancelAction)
+            alert.addAction(defaultAction)
+            present(alert, animated: true, completion: nil)
+          
+        }
+      
     }
     
     
@@ -332,6 +405,7 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
                                 self.dateTxt = date
                                 print("time is \(time)")
                                 print("date is \(date)")
+                                print("self.dateTxt is \(self.dateTxt)")
                             }
                         }
                     }
@@ -382,14 +456,17 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BookingTimeCell", for: indexPath) as! BookingTimeCell
         
         //타티스트가 가능하다고 선택했던 시간 넣어주기
-        cell.btnAvailableTime.setTitle(row.tatt_time!+"시", for: .normal)
-        
+//        cell.btnAvailableTime.setTitle(row.tatt_time!+"시", for: .normal)
+        cell.availableTime?.text = row.tatt_time! + "시"
         return cell
       }
     
+   
+    
     //셀 클릭시 이벤트
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("\(indexPath.row) 시간을 선택하였다")
+        print("\(self.timeArray[indexPath.row]) 시간을 선택하였다")
+        self.selectedTime = self.timeArray[indexPath.row]+"시"
     }
     
     

@@ -11,6 +11,6 @@ import UIKit
 class BookingTimeCell: UICollectionViewCell{
     
     //타티스트가 가능하다고 한 시간대
-    @IBOutlet var btnAvailableTime: UIButton!
     
+    @IBOutlet var availableTime: UILabel!
 }
