@@ -308,10 +308,8 @@ class SetTattistTimeController: UIViewController{
                 switch encodingResult {
                 case .success(let upload, _, _):
                     upload.responseJSON{ response in debugPrint(response)}
-                    print("석세스래.,,,,,,,,,,,,,")
                 case .failure(let encodingError):
                     print(encodingError)
-                    print("인코딩에러???.,,,,,,,,,,,,,")
 
                 }
             } )

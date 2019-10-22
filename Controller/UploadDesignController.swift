@@ -276,6 +276,11 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
     @IBAction func go_back(_ sender: UIButton) {
         self.dismiss(animated: false)
     }
+    
+    //바깥 아무데나 누르면 키보드 사라짐
+       override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+           view.endEditing(true)
+       }
 }
 
 

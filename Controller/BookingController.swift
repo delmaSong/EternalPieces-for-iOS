@@ -74,7 +74,10 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
     var tattId = ""
     //컬렉션뷰에 넣어줄 데이터 리스트
     var list: [FindTattistVO] = []
-   
+   //도안 주소값, 작업장 주소, 도안 아이디값 담을 변수
+    var designURL = ""
+    var tatt_place = ""
+   var designId = ""
     
     //selectedBodyPart 피커뷰에 담길 데이터
     var bodyPartList = ["팔 상단", "팔 하단", "허벅지", "종아리", "손", "발", "목", "등", "기타 부위"]
@@ -94,18 +97,14 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
         pickSize.delegate = self
         
         
-        
         //피커뷰 미선택시 디폴트로 가장 앞에 있는거 자동 선택
         pickerView(pickBodyPart, didSelectRow: 0, inComponent: 0)
         pickerView(pickSize, didSelectRow: 0, inComponent: 0)
         
         //타티스트 데이터 세팅
         getTattistData()
-        print("타티스트 데이터 세팅 후 self.dateTxt is \(self.dateTxt)")
         //이번주 월요일 날짜 가져옴
         setDate(date:now)
-        print("날짜 세팅 후 self.dateTxt is \(self.dateTxt)")
-
         //도안데이터 세팅
         getDesignData()
     }
@@ -173,7 +172,6 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
             self.mon.setTitleColor(.black, for: .normal)
             self.monDate = longFormatter.string(from: startOfWeek!) //해당 날짜의 풀 형식 yyyy년 mm월 dd일
         }
-        
         //화요일
         if now.timeIntervalSince(thisTue) >= 0 || !self.dateTxt.contains("화"){
             self.tue.isEnabled = false
@@ -184,10 +182,6 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
             self.tueDate = longFormatter.string(from: thisTue)
         }
         //수요일
-        print("now is \(now)")
-        print("thisWed is \(thisWed)")
-        print("now.timeIntervalSince is \(now.timeIntervalSince(thisWed))")
-        print("self.dateTxt is \(self.dateTxt)")
         if now.timeIntervalSince(thisWed) >= 0 || !self.dateTxt.contains("수"){
             self.wed.isEnabled = false
             self.wed.setTitleColor(.gray, for: .normal)
@@ -316,15 +310,17 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
                                                st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
                                                
                                                //예약정보 취합해 결제화면으로 전달
-                                               //선택된 날짜와 요일
-                                               st.selectedDate = self.selectedDate.text!
-                                               //도안 이름
-                                               st.designName = self.designName.text!
-                                               st.bodyPart = self.selectedBodyPart
-                                               st.selectedSize = self.selectedSize
-                                               st.selectedTime = self.selectedTime
                                                
-                                           
+                                               st.selectedDate = self.selectedDate.text!        //선택된 날짜와 요일
+                                               st.bodyPart = self.selectedBodyPart      //선택한 부위
+                                               st.selectedSize = self.selectedSize      //선택한 사이즈
+                                               st.selectedTime = self.selectedTime      //선택한 시간
+                                               st.designURL = self.designURL        //도안url
+                                                st.payPrice = self.designPrice.text!        //결제할 금액
+                                                st.tattId = self.tattId     //타티스트 아이디
+                                                st.tattPlace = self.tatt_place      //작업장 주소
+                                                st.designId = self.designId         //도안 아이디값
+                    
                                                self.present(st, animated: true)
                                            }
             }
@@ -373,10 +369,12 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
                         let imgURL = URL(string: url+respData.design_photo!)
                         self.selectedDesign.kf.setImage(with: imgURL)
                         
+                        //다음 화면에 보낼 데이터들 변수에 담음
+                        self.designURL = respData.design_photo!
+
                     }catch{
                         print(error.localizedDescription)
                     }
-                    print("design obj is \(obj)")
 
                 }
 
@@ -390,22 +388,20 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
     func getTattistData(){
         let url = "http:127.0.0.1:1234/api/join_api/?tatt_id="+self.tattId
         let doNetwork = Alamofire.request(url)
-        print("getTatttData url is \(url)")
         doNetwork.responseJSON{(response) in
             switch response.result{
             case .success(let obj): //통신 성공
-                print("통신 성공~~~~~~~~₩")
 
                 if let nsArray = obj as? NSArray{
                     
                     for bundle in nsArray{
                         if let nsDictionary = bundle as? NSDictionary{
-                            if let time = nsDictionary["tatt_time"] as? String, let date = nsDictionary["tatt_date"] as? String{
+                            if let time = nsDictionary["tatt_time"] as? String, let date = nsDictionary["tatt_date"] as? String, let place = nsDictionary["tatt_addr"] as? String, let id = nsDictionary["id"] as? Int{
                                 self.timeTxt = time
                                 self.dateTxt = date
-                                print("time is \(time)")
-                                print("date is \(date)")
-                                print("self.dateTxt is \(self.dateTxt)")
+                                self.tatt_place = place
+                                self.designId = String(id)
+                                print("designId is \(self.designId)")
                             }
                         }
                     }
@@ -446,7 +442,6 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
     
     //보여질 갯수 ..서버에서 받아와서 넣어줘야함
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("timeArray.count is \(self.timeArray.count)")
         return self.timeArray.count-1
       }
       
@@ -465,7 +460,7 @@ class BookingController: UIViewController, UICollectionViewDelegate, UICollectio
     
     //셀 클릭시 이벤트
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("\(self.timeArray[indexPath.row]) 시간을 선택하였다")
+        print("\(self.timeArray[indexPath.row]) 시를 선택함 ")
         self.selectedTime = self.timeArray[indexPath.row]+"시"
     }
     
