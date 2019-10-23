@@ -17,7 +17,7 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
     var selectedKey = ""    //버튼 선택시 서버 넘길 키워드
     
     //서버에서 json list 받을 튜플
-    var dataTuple : (tId: String, tDesc: String, dPhoto: String, dId: Int) = ("", "", "", 0)
+    var dataTuple : (tId: String, dDesc: String, dPhoto: String, dId: Int) = ("", "", "", 0)
     //서버에서 json list 받을 어레이. 어레이 속에 튜플 들어간 구조
     var dataArray :[(String, String, String, Int)] = []
     //어레이 인서트시 사용할 인덱스
@@ -103,9 +103,9 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
                 if let nsArray = obj as? NSArray{       //array 벗김
                     for bundle in nsArray {
                         if let nsDictionary = bundle as? NSDictionary{         //dictionary 벗겨서 튜플에 각 데이터 삽입
-                            if let tId = nsDictionary["tatt_id"] as? String, let tDesc = nsDictionary["design_desc"] as? String
+                            if let tId = nsDictionary["tatt_id"] as? String, let dDesc = nsDictionary["design_desc"] as? String
                                 , let dPhoto = nsDictionary["design_photo"] as? String, let dId = nsDictionary["id"] as? Int{
-                                self.dataTuple = (tId, tDesc, dPhoto, dId)   //튜플에 데이터 삽입
+                                self.dataTuple = (tId, dDesc, dPhoto, dId)   //튜플에 데이터 삽입
                             }
                         }
                     
@@ -124,10 +124,10 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
             self.list = {
                   var datalist = [FindStyleVO]()
 
-                  for(tId, tDesc, dPhoto, dId) in self.dataArray{
+                  for(tId, dDesc, dPhoto, dId) in self.dataArray{
                       var fvo = FindStyleVO()
                       fvo.tatt_id = tId
-                      fvo.design_desc = tDesc
+                      fvo.design_desc = dDesc
                       fvo.design_photo = dPhoto
                       fvo.design_id = dId
                                            
@@ -159,8 +159,9 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
         //각 셀에 데이터 삽입
         cell.tattistId?.text = row.tatt_id
         cell.design.kf.setImage(with:imgURL)    //킹피셔 이용한 이미지 삽입
-        cell.desc?.text = row.design_desc
-
+//        cell.desc?.layer.borderColor = UIColor.gray.cgColor
+//        cell.desc?.layer.borderWidth = 0.5
+        cell.desc?.text = row.design_desc!
         return cell
     }
 

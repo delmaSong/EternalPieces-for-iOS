@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import Alamofire
+import Kingfisher
 
 class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICollectionViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource{
 
@@ -27,51 +29,89 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
         pickerSmall.dataSource = self
         pickerSmall.delegate = self
         
+        //서버에서 데이터 가져오기
+        getData()
     }
     
-    //컬렉션 셀에 담길 데이터
-    var dataSet = [
-        ("codog.jpeg","tattistId","tattist self introduce"),
-        ("codog.jpeg","타티스트아이디","셀프 간단 소개쓰"),
-        ("codog.jpeg","멍냥쓰","tattist self introduce"),
-        ("codog.jpeg","멍뭉쓰","tattist self introduce"),
-        ("codog.jpeg","더미데이터","tattist self introduce")
-        
-    ]
+    //서버에서 json list  받을 튜플
+    var dataTuple : (tId: String, tInfo: String, tPhoto: String) = ("", "", "")
+    //서버에서 json list 받을 어레이.
+    var dataArray : [(String, String, String)] = []
+    //어레이 인서트시 사용할 인덱스
+    var num: Int = 0
+    //컬렉션뷰에 넣어줄 데이터 리스트
+    var list: [FindTattistVO] = []
     
     //피커뷰에 담길 데이터.. 서울일때와 경기도일때 smallArea 데이터 달라야하는데,,
     var bigAreaList = ["서울시", "경기도", "강원도", "충청도"]
     var smallAreaList = ["마포구", "용산구", "서대문구","중구"]
     
-    lazy var list: [FindTattistVO] = {
-        
-        var datalist = [FindTattistVO]()
-        
-        for(profile, tattistId, tattistIntro) in self.dataSet{
-            let fvo = FindTattistVO()
-            fvo.profile = profile
-            fvo.tattistId = tattistId
-            fvo.tattistIntro = tattistIntro
+
+    
+
+    
+    
+    //서버에서 타티스트 모든 목록 가져오기
+      func getData(){
+          let url = "http://127.0.0.1:1234/api/join_api/"
+          let doNetwork = Alamofire.request(url)
+          doNetwork.responseJSON{(response) in
+              switch response.result{
+              case .success(let obj):
+                  if let nsArray = obj as? NSArray{       //어레이 벗기면 딕셔너리
+                      for bundle in nsArray{
+                          if let nsDictionary = bundle as? NSDictionary{
+                              //dictionary 벗겨서 튜플에 각 데이터 삽입
+                              if let tId = nsDictionary["tatt_id"] as? String, let tInfo = nsDictionary["tatt_intro"] as? String, let tPhoto = nsDictionary["tatt_profile"] as? String {
+                                  self.dataTuple = (tId, tInfo, tPhoto)   //튜플에 데이터삽입
+                              }
+                          }
+                          
+                          //어레이에 튜플로 이뤄진 값 삽입
+                          self.dataArray.insert(self.dataTuple, at: self.num)
+                          self.num += 1
+                      }
+                      //컬렉션뷰 데이터 리로드
+                      self.collectionView.reloadData()
+                  }
+              case .failure(let e):   //통신 실패
+                  print(e.localizedDescription)
+              }
             
-            datalist.append(fvo)
-        }
-        return datalist
-    }()
+            //컬렉션셀에 넣어줄 데이터 준비
+            self.list = {
+               var datalist = [FindTattistVO]()
+                
+                for(tId, tInfo, tPhoto) in self.dataArray{
+                    let fvo = FindTattistVO()
+                    fvo.profile = tPhoto
+                    fvo.tattistId = tId
+                    fvo.tattistIntro = tInfo
+                    
+                    datalist.append(fvo)
+                }
+                return datalist
+            }()
+          }
+      }
     
     
+
     
+    
+    //셀 갯수 설정
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.list.count
     }
     
-    
+    //셀 내용 삽입
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let row = self.list[indexPath.row]
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FindTattistCell", for: indexPath) as! FindTattistCell
         
-        cell.profile.image = UIImage(named: row.profile!)
+        let imgURL = URL(string: row.profile!)
+        cell.profile.kf.setImage(with: imgURL)
         cell.tattistId?.text = row.tattistId
         cell.tattistIntro?.text = row.tattistIntro
         
@@ -116,7 +156,7 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
         
     
     
-    
+  
     
     
 }
