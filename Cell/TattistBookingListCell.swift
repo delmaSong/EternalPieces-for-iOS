@@ -12,12 +12,8 @@ class TattistBookingListCell : UITableViewCell{
     
     /*타티스트의 예약목록 씬의 테이블 셀*/
     
-    //예약 월
-    @IBOutlet var month: UILabel!
-    //예약 일
+    //예약일
     @IBOutlet var date: UILabel!
-    //예약 요일
-    @IBOutlet var day: UILabel!
     //예약 시간
     @IBOutlet var time: UILabel!
     //예약자 아이디

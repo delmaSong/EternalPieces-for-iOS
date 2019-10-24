@@ -18,5 +18,5 @@ struct TattooerBookingListVO: Codable {
     var bodyPart: String?       //시술 부위
     var size: String?              //시술 사이즈
     var request: String?        //요청사항
-    
+    var tattooer: String?       //예약자
 }
