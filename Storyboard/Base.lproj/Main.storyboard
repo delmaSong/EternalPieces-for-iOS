@@ -1507,7 +1507,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="wFV-Ct-C60">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="133" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="wFV-Ct-C60">
                                 <rect key="frame" x="0.0" y="89" width="414" height="753"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
@@ -1519,25 +1519,25 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" misplaced="YES" text="15시" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sgm-6v-nyM">
-                                                    <rect key="frame" x="252" y="10" width="45" height="27"/>
+                                                    <rect key="frame" x="252" y="12" width="45" height="27"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="예약자 아이디" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n4s-pb-Oul">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="예약자 아이디" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n4s-pb-Oul">
                                                     <rect key="frame" x="25" y="47" width="104" height="23"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="19"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="요구사항 간략하게 기재되는 곳" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HNH-CB-q9t">
-                                                    <rect key="frame" x="25" y="70" width="369" height="54"/>
+                                                    <rect key="frame" x="25" y="76" width="369" height="46"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" misplaced="YES" text="2019년 10월 30일 수요일" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vwd-GZ-clD">
-                                                    <rect key="frame" x="20" y="13" width="239" height="20"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" misplaced="YES" text="2019년 11월 30일 수요일" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vwd-GZ-clD">
+                                                    <rect key="frame" x="20" y="17" width="239" height="20"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1546,16 +1546,16 @@
                                             <constraints>
                                                 <constraint firstItem="Sgm-6v-nyM" firstAttribute="top" secondItem="vwd-GZ-clD" secondAttribute="bottom" constant="-23" id="9HB-rE-uLi"/>
                                                 <constraint firstItem="n4s-pb-Oul" firstAttribute="top" secondItem="8bB-YD-azs" secondAttribute="topMargin" constant="36" id="ErJ-6U-szT"/>
-                                                <constraint firstItem="HNH-CB-q9t" firstAttribute="leading" secondItem="8bB-YD-azs" secondAttribute="leadingMargin" id="I8w-mh-wdj"/>
-                                                <constraint firstItem="Sgm-6v-nyM" firstAttribute="baseline" secondItem="n4s-pb-Oul" secondAttribute="baseline" constant="-35.5" id="LcI-YG-dlK"/>
-                                                <constraint firstItem="HNH-CB-q9t" firstAttribute="top" secondItem="n4s-pb-Oul" secondAttribute="bottom" id="NG6-OR-9BI"/>
+                                                <constraint firstItem="HNH-CB-q9t" firstAttribute="leading" secondItem="8bB-YD-azs" secondAttribute="leadingMargin" constant="5" id="I8w-mh-wdj"/>
+                                                <constraint firstItem="Sgm-6v-nyM" firstAttribute="baseline" secondItem="n4s-pb-Oul" secondAttribute="baseline" constant="-29.5" id="LcI-YG-dlK"/>
+                                                <constraint firstItem="HNH-CB-q9t" firstAttribute="top" secondItem="n4s-pb-Oul" secondAttribute="bottom" constant="6" id="NG6-OR-9BI"/>
                                                 <constraint firstAttribute="trailingMargin" relation="lessThanOrEqual" secondItem="HNH-CB-q9t" secondAttribute="trailing" constant="36" id="T4p-A9-0lK"/>
                                                 <constraint firstAttribute="trailingMargin" relation="lessThanOrEqual" secondItem="n4s-pb-Oul" secondAttribute="trailing" constant="270" id="ZQU-rq-rtW"/>
-                                                <constraint firstItem="HNH-CB-q9t" firstAttribute="top" secondItem="n4s-pb-Oul" secondAttribute="bottom" id="k9y-xH-eVh"/>
+                                                <constraint firstItem="HNH-CB-q9t" firstAttribute="top" secondItem="n4s-pb-Oul" secondAttribute="bottom" constant="6" id="k9y-xH-eVh"/>
                                                 <constraint firstAttribute="bottomMargin" relation="lessThanOrEqual" secondItem="HNH-CB-q9t" secondAttribute="bottom" constant="87" id="tQ3-ys-gLH"/>
                                                 <constraint firstItem="HNH-CB-q9t" firstAttribute="leading" secondItem="n4s-pb-Oul" secondAttribute="leading" id="vEn-SI-WdA"/>
                                                 <constraint firstItem="Sgm-6v-nyM" firstAttribute="leading" secondItem="vwd-GZ-clD" secondAttribute="leading" constant="232" id="yK8-mN-RNm"/>
-                                                <constraint firstItem="n4s-pb-Oul" firstAttribute="leading" secondItem="Sgm-6v-nyM" secondAttribute="trailing" constant="-277" id="ztG-CB-jML"/>
+                                                <constraint firstItem="n4s-pb-Oul" firstAttribute="leading" secondItem="Sgm-6v-nyM" secondAttribute="trailing" constant="-272" id="ztG-CB-jML"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>

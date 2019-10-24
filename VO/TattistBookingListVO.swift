@@ -8,13 +8,10 @@
 
 import Foundation
 
-class TattistBookingListVO{
-    //시술 월
-    var month: String?
-    //시술 날짜
-    var date: String?
+struct TattistBookingListVO: Codable{
+
     //시술 요일
-    var day: String?
+    var date: String?
     //시술 시간
     var time: String?
     //예약자 아이디
