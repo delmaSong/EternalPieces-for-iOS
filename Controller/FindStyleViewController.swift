@@ -161,7 +161,7 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
         cell.design.kf.setImage(with:imgURL)    //킹피셔 이용한 이미지 삽입
 //        cell.desc?.layer.borderColor = UIColor.gray.cgColor
 //        cell.desc?.layer.borderWidth = 0.5
-        cell.desc?.text = row.design_desc!
+        cell.desc?.text = row.design_desc
         return cell
     }
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class TattooerBookingListVO {
+struct TattooerBookingListVO: Codable {
     var design: String?         //도안 이미지
     var date: String?            //시술 날짜
     var time: String?            //시술 시간

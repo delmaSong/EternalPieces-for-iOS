@@ -55,9 +55,7 @@ class SetTattistTimeController: UIViewController{
     var selectedDate: String = ""
     var selectedTime: String = ""
     
-    override func viewDidLoad() {
-      print("self.editFlag is \(self.editFlag)")
-        
+    override func viewDidLoad() {        
         //수정하기위해 화면 들어온거라면
         if self.editFlag == 1{
             //서버에서
@@ -73,8 +71,7 @@ class SetTattistTimeController: UIViewController{
                             let respData = try JSONDecoder().decode(FindTattistVO.self, from: dataJSON)
                             self.selectedDate = respData.tatt_date!
                             self.selectedTime = respData.tatt_time!
-                            print("self.selectedDate is \(self.selectedDate)")
-                            print("self.selectedTime is \(self.selectedTime)")
+                         
                         }catch{
                             print(error.localizedDescription)
                         }
@@ -340,6 +337,16 @@ class SetTattistTimeController: UIViewController{
                     let params = [ "tatt_time" : times, "tatt_date" : days ]
                     let url = "http://127.0.0.1:1234/api/join_api/"
                     Alamofire.request(url+"3", method: .put, parameters: params, encoding: JSONEncoding.default)
+                    
+                    let alert2 = UIAlertController(title:"알림", message: "시술 가능 시간이 수정되었습니다", preferredStyle: UIAlertController.Style.alert)
+                    let ok2 = UIAlertAction(title: "확인", style: .default) { (action) in
+                        if let st = self.storyboard?.instantiateViewController(withIdentifier: "SettingView") as? SettingController {
+                            st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+                            self.present(st, animated: true)
+                        }
+                    }
+                    alert2.addAction(ok2)
+                    self.present(alert2, animated: true, completion: nil)
                 }else{  //회원가입이라면
 
                                //user 테이블에 insert
@@ -383,7 +390,7 @@ class SetTattistTimeController: UIViewController{
                                let alert2 = UIAlertController(title:"", message:"회원가입이 완료되었습니다", preferredStyle: .alert)
                                
                                let ok2 = UIAlertAction(title: "확인", style: .default){ action in
-                                   if let st = self.storyboard?.instantiateViewController(withIdentifier: "LoginScene"){
+                                   if let st = self.storyboard?.instantiateViewController(withIdentifier: "LoginScene"){    //로그인 화면으로 이동
                                        st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
                                        self.present(st, animated: true)
                                    }

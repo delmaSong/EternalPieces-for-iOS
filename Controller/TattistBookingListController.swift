@@ -9,6 +9,7 @@
 
 import Foundation
 import UIKit
+import Alamofire
 
 class TattistBookingListController: UIViewController, UITableViewDelegate, UITableViewDataSource{
     
