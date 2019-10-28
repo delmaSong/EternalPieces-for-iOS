@@ -2168,6 +2168,9 @@
                                 <state key="normal" title="이미지 선택">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="selectImg:" destination="daU-74-Wg5" eventType="touchUpInside" id="2ly-hs-3sO"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bvg-kQ-vMq">
                                 <rect key="frame" x="265" y="533" width="45" height="30"/>
@@ -2178,6 +2181,9 @@
                                 <state key="normal" title="취소">
                                     <color key="titleColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
                                 </state>
+                                <connections>
+                                    <action selector="cancel:" destination="daU-74-Wg5" eventType="touchUpInside" id="zIl-P5-IlN"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iPJ-OV-FLn">
                                 <rect key="frame" x="326" y="533" width="45" height="30"/>
@@ -2185,6 +2191,9 @@
                                 <state key="normal" title="업로드">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="upload:" destination="daU-74-Wg5" eventType="touchUpInside" id="gVi-Bh-tbf"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2219,6 +2228,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="wPb-N2-pDi"/>
                     </view>
+                    <connections>
+                        <outlet property="work_img" destination="0NG-T0-OnT" id="0zn-yh-n5j"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ebT-Zv-t90" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="VM3-cS-iQI" userLabel="Exit" sceneMemberID="exit"/>
