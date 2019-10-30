@@ -9,8 +9,7 @@
 import Foundation
 import UIKit
 
-
-class SetTattistPlaceController: UIViewController, MTMapViewDelegate{
+class SetTattistPlaceController: UIViewController{
     
     //맵뷰
 //    var mapView = MTMapView()

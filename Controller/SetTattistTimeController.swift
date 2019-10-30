@@ -363,7 +363,7 @@ class SetTattistTimeController: UIViewController{
                                   "tatt_id" : self.paramId,
                                   "tatt_date" : days,
                                   "tatt_work" : "hi",
-                                  "tatt_addr" : "hi",
+                                  "tatt_addr" : self.paramPlace,
                                   "tatt_intro" : self.paramIntro,
                                    ] as [String : Any]
                     
