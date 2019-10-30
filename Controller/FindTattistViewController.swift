@@ -1,4 +1,4 @@
-//
+
 //  FindTattistViewController.swift
 //  EternalPieces
 //
@@ -19,18 +19,29 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
     @IBOutlet var pickerBig: UIPickerView!
     @IBOutlet var pickerSmall: UIPickerView!
     
+    //지역 대분류 리스트
+    let bigArea = ["지역을","서울", "부산", "제주"]
+    let seoul = ["선택해주세요","마포구", "서대문구", "종로구"]
+    let busan = ["선택해주세요","수영구", "동래구", "중구"]
+    let jeju = ["선택해주세요","서귀포시", "제주시", "중구"]
+    //대분류 선택 플래그
+    var big: String = ""
+    //선택된 항목
+    var selectedBig: String = ""
+    var selectedSmall: String = ""
+    
     override func viewDidLoad() {
         collectionView.dataSource = self
         collectionView.delegate = self
         
-        pickerBig.dataSource = self
         pickerBig.delegate = self
+        pickerBig.dataSource = self
         
-        pickerSmall.dataSource = self
         pickerSmall.delegate = self
+        pickerSmall.dataSource = self
         
         //서버에서 데이터 가져오기
-        getData()
+        getData(url:"http://127.0.0.1:1234/api/join_api/", filter: "")
     }
     
     //서버에서 json list  받을 튜플
@@ -42,19 +53,16 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
     //컬렉션뷰에 넣어줄 데이터 리스트
     var list: [FindTattistVO] = []
     
-    //피커뷰에 담길 데이터.. 서울일때와 경기도일때 smallArea 데이터 달라야하는데,,
-    var bigAreaList = ["서울시", "경기도", "강원도", "충청도"]
-    var smallAreaList = ["마포구", "용산구", "서대문구","중구"]
-    
+
 
     
 
     
     
     //서버에서 타티스트 모든 목록 가져오기
-      func getData(){
-          let url = "http://127.0.0.1:1234/api/join_api/"
-          let doNetwork = Alamofire.request(url)
+    func getData(url: String, filter: String){
+        let encodingString = (url+filter).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+          let doNetwork = Alamofire.request(encodingString)
           doNetwork.responseJSON{(response) in
               switch response.result{
               case .success(let obj):
@@ -93,6 +101,7 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
                 return datalist
             }()
           }
+        self.num=0
       }
     
     
@@ -120,8 +129,6 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
     
     //셀 클릭시 이벤트
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        NSLog("선택된 행은 \(indexPath.row)번째 행입니다")
-        
         if let lmc = self.storyboard?.instantiateViewController(withIdentifier: "TattistWithTabBar"){
             
             lmc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
@@ -133,24 +140,89 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
     
     
     
-    //피커뷰 컬럼 수
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return self.bigAreaList.count
+        return 1
     }
     
     //컴포넌트가 가질 목록의 길이
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return 0
+           //대분류 피커뷰일경우
+             if pickerView == pickerBig{
+                 return self.bigArea.count
+             }else if pickerView == pickerSmall{
+                 return self.seoul.count
+             }
+             return 1
     }
     
     //피커뷰 각 행에 출력될 타이틀
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return self.bigAreaList[row]
+        if pickerView == pickerBig {
+           return self.bigArea[row]
+       }else if pickerView == pickerSmall && big == "서울"{
+           return self.seoul[row]
+       }else if pickerView == pickerSmall && big == "부산"{
+           return self.busan[row]
+       }else if pickerView == pickerSmall && big == "제주"{
+           return self.jeju[row]
+       }else if pickerView == pickerSmall{
+           return self.seoul[row]
+       }
+        return ""
+        
     }
     
     //피커뷰 선택시 이벤트
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-         NSLog("피커뷰로 \(self.bigAreaList[row])를 선택하였습니다")
+
+        if pickerView == pickerBig && pickerBig.selectedRow(inComponent: 0) == 1 {
+           pickerSmall.selectRow(0, inComponent: 0, animated: true)
+           self.selectedBig = "서울"
+           self.big = "서울"
+           self.pickerSmall.reloadAllComponents()
+            
+            self.dataArray.removeAll()
+        
+            getData(url: "http://127.0.0.1:1234/api/join_api/?area=", filter: self.selectedBig)
+       }else if pickerView == pickerBig && pickerBig.selectedRow(inComponent: 0) == 2{
+           pickerSmall.selectRow(0, inComponent: 0, animated: true)
+           self.selectedBig = "부산"
+           self.big = "부산"
+           self.pickerSmall.reloadAllComponents()
+           
+            self.dataArray.removeAll()
+            getData(url: "http://127.0.0.1:1234/api/join_api/?area=", filter: self.selectedBig)
+
+            
+        }else if pickerView == pickerBig && pickerBig.selectedRow(inComponent: 0) == 3{
+           pickerSmall.selectRow(0, inComponent: 0, animated: true)
+           self.selectedBig = "제주"
+           self.big = "제주"
+           self.pickerSmall.reloadAllComponents()
+
+            self.dataArray.removeAll()
+            getData(url: "http://127.0.0.1:1234/api/join_api/?area=", filter: self.selectedBig)
+
+        }else if pickerView == pickerSmall && pickerBig.selectedRow(inComponent: 0) == 0{
+           self.selectedSmall = self.seoul[row]
+          
+            self.dataArray.removeAll()
+            getData(url: "http://127.0.0.1:1234/api/join_api/?area=", filter: self.selectedSmall)
+
+
+       }else if pickerView == pickerSmall && pickerBig.selectedRow(inComponent: 0) == 1{
+           self.selectedSmall = self.busan[row]
+
+            self.dataArray.removeAll()
+            getData(url: "http://127.0.0.1:1234/api/join_api/?area=", filter: self.selectedSmall)
+
+       }else if pickerView == pickerSmall && pickerBig.selectedRow(inComponent: 0) == 2{
+           self.selectedSmall = self.jeju[row]
+
+                self.dataArray.removeAll()
+                getData(url: "http://127.0.0.1:1234/api/join_api/?area=", filter: self.selectedSmall)
+
+       }
     }
         
         

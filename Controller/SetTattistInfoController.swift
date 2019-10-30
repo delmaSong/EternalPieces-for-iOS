@@ -97,7 +97,6 @@ class SetTattistInfoController: UIViewController, UIImagePickerControllerDelegat
         
     }
     
-    //피커뷰 보여질 선택항목 갯수
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
           return 1
       }
