@@ -7,32 +7,76 @@
 //
 
 import UIKit
+import Alamofire
+import Kingfisher
+
 class TattistWithWorkController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource{
    
-    
     @IBOutlet var collectionView: UICollectionView!
+    
+    //서버에서 json list  받을 튜플
+    var dataTuple : (dId: Int, dPhoto: String) = (0, "")
+    //서버에서 json list 받을 어레이.
+    var dataArray : [(Int, String)] = []
+    //어레이 인서트시 사용할 인덱스
+    var num: Int = 0
+    //컬렉션뷰에 넣어줄 데이터 리스트
+    var list: [WorksVO] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
+
         
+        NotificationCenter.default.addObserver(self, selector: #selector(getData), name: .getData, object: nil)
     }
-    var dataSet = ["codog.jpeg","dawn.png","codog.jpeg","waterfall.png","codog.jpeg","waterfall.png"]
     
-    lazy var list : [TattistWithWorkVO] = {
-        
-        var datalist = [TattistWithWorkVO]()
-        
-        for work in self.dataSet{
-            let tvo = TattistWithWorkVO()
-            tvo.work = work
-            
-            datalist.append(tvo)
-        }
-        
-        return datalist
-    }()
+    
+     @objc func getData(_ notification: Notification){
+          let tattId = notification.object as! String
+          let url = "http:127.0.0.1:1234/api/works/?tatt_id="
+          let doNetwork = Alamofire.request(url+tattId)
+          doNetwork.responseJSON{(response) in
+              switch response.result{
+              case .success(let obj):
+                  if let nsArray = obj as? NSArray{       //어레이 벗기면 딕셔너리
+                      for bundle in nsArray{
+                          if let nsDictionary = bundle as? NSDictionary{
+                              //dictionary 벗겨서 튜플에 각 데이터 삽입
+                              if let dId = nsDictionary["id"] as? Int, let dPhoto = nsDictionary["works"] as? String{
+                                  self.dataTuple = (dId, dPhoto)   //튜플에 데이터삽입
+                              }
+                          }
+                          
+                          //어레이에 튜플로 이뤄진 값 삽입
+                          self.dataArray.insert(self.dataTuple, at: self.num)
+                          self.num += 1
+                      }
+                      //컬렉션뷰 데이터 리로드
+                      self.collectionView.reloadData()
+                  }
+              case .failure(let e):
+                  print(e.localizedDescription)
+              }
+              
+              //컬렉션셀에 넣어줄 데이터 준비
+              self.list = {
+                 var datalist = [WorksVO]()
+                  
+                  for(dId, dPhoto) in self.dataArray{
+                      var fvo = WorksVO()
+                      fvo.works = dPhoto
+                      fvo.id = dId
+                      
+                      datalist.append(fvo)
+                  }
+                  return datalist
+              }()
+          }
+      }
+    
+  
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -43,7 +87,7 @@ class TattistWithWorkController: UIViewController, UICollectionViewDelegate, UIC
         let row = self.list[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TattistWithWorkCell", for: indexPath) as! TattistWithWorkCell
         
-        cell.work.image = UIImage(named: row.work!)
+        cell.work.kf.setImage(with: URL(string:row.works!))
         
         return cell
     }

@@ -16,7 +16,7 @@ class FindTattistVO :Codable{
     //타티스트 소개 
     var tattistIntro: String?
     //타티스트 고유 아이디
-    var id: Int?
+    var id: String?
     //시술 가능 시간
     var tatt_time: String?
     //시술 가능 요일

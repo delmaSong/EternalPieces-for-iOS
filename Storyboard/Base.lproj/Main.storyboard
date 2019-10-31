@@ -120,7 +120,7 @@
         <!--Item-->
         <scene sceneID="7NT-zt-oqo">
             <objects>
-                <viewController id="FUR-qb-aYV" customClass="TattistWithDesignController" customModule="EternalPieces" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TattistWithDesign" id="FUR-qb-aYV" customClass="TattistWithDesignController" customModule="EternalPieces" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0TK-Vs-mNG">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -171,7 +171,7 @@
         <!--Item-->
         <scene sceneID="o7C-8U-wu8">
             <objects>
-                <viewController id="GS6-BP-Jbb" customClass="TattistWithWorkController" customModule="EternalPieces" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TattistWithWork" id="GS6-BP-Jbb" customClass="TattistWithWorkController" customModule="EternalPieces" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jbT-QW-22h">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -222,7 +222,7 @@
         <!--Item-->
         <scene sceneID="qk2-Ne-oEy">
             <objects>
-                <viewController id="8b5-q4-dP1" customClass="TattistWithReviewController" customModule="EternalPieces" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TattistWithReview" id="8b5-q4-dP1" customClass="TattistWithReviewController" customModule="EternalPieces" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="2ZY-yZ-Snp">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

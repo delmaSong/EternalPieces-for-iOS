@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import Alamofire
+import Kingfisher
+
 class TattistWithTabBarController: UITabBarController{
     
     let tabView = UIView()      //탭바로 사용될 뷰
@@ -22,22 +25,20 @@ class TattistWithTabBarController: UITabBarController{
     let btnLike = UIButton(type: .system)       //좋아요 버튼
     
     let lblId = UILabel()       //타티스트 아이디
-    let lblIntro = UITextView()        //타티스트 셀프 소개 레이블보다 텍스트뷰가 나을까?
+    let lblIntro = UITextView()        //타티스트 셀프 소개
     
+    //건네받을 타티스트 아이디
+    var tattId: String = ""
+    
+
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tabBar.isHidden = true     //기존 탭바 숨겨줌
         
-        
-        
         let width = self.view.frame.width
         let height : CGFloat = 50
-        
-        
-        
-        
         
         //상단 이미지 설정
         self.imgTop.frame = CGRect(x: 0, y: 0, width: width, height: self.view.frame.height / 4)
@@ -71,9 +72,6 @@ class TattistWithTabBarController: UITabBarController{
         
         //처음에 첫번째 탭이 선택되어 있도록 초기 상태 정의해둠
         self.onTabBarItemClick(self.tabItem01)
-        
-        
-        
         
         
         
@@ -127,6 +125,9 @@ class TattistWithTabBarController: UITabBarController{
         
         //좋아요 버튼 설정
         
+        
+        //서버에서 데이터 가져오기
+        getData()
     
     }
     
@@ -156,7 +157,6 @@ class TattistWithTabBarController: UITabBarController{
    
     
     let colorli = #colorLiteral(red: 0.9730329949, green: 0.6387086235, blue: 0.5980552073, alpha: 1)
-    
     //버튼 선택시 이벤트
     @objc func onTabBarItemClick(_ sender: UIButton){
         
@@ -171,12 +171,60 @@ class TattistWithTabBarController: UITabBarController{
         
         //버튼에 설정된 태그값을 사용해 뷰컨트롤러를 전환한다
         self.selectedIndex = sender.tag
+        
+        
+        //noti로 데이터 전달
+        NotificationCenter.default.post(name: .getData, object: self.tattId)
+
+        
+        
     }
     
+    
+    
+
     
     @objc func goToBack(_ sender: UIButton){
         self.presentingViewController?.dismiss(animated: true)
     }
     
     
+    
+    //서버에서 데이터 가져오기
+    func getData(){
+        let url = "http:127.0.0.1:1234/api/join_api/?tatt_id="
+        let doNetwork = Alamofire.request(url+self.tattId)
+        doNetwork.responseJSON{(response) in
+            switch response.result{
+            case .success(let obj):
+                if let nsArray = obj as? NSArray{       //어레이 벗기면 딕셔너리
+                     for bundle in nsArray{
+                         if let nsDictionary = bundle as? NSDictionary{
+                             if let tId = nsDictionary["tatt_id"] as? String, let tInfo = nsDictionary["tatt_intro"] as? String, let tPhoto = nsDictionary["tatt_profile"] as? String  {
+                                self.lblId.text = tId
+                                self.lblIntro.text = tInfo
+                                self.imgProfile.kf.setImage(with: URL(string: tPhoto))
+                            }
+                         }
+                         
+                     }
+                 }
+            case .failure(let e):
+                print(e.localizedDescription)
+            }
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        //옵저버 제거
+        NotificationCenter.default.removeObserver(self, name: .getData, object: nil)
+        print("옵저버 제거되었다~~~~~")
+    }
+    
+    
+}
+
+//옵저버에 이름 추가
+extension Notification.Name{
+    static let getData = Notification.Name("getData")
 }
