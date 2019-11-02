@@ -20,7 +20,7 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
     @IBOutlet var pickerSmall: UIPickerView!
     
     //지역 대분류 리스트
-    let bigArea = ["지역을","서울", "부산", "제주"]
+    let bigArea = ["지역","서울", "부산", "제주"]
     let seoul = ["전체","마포구", "서대문구", "종로구"]
     let busan = ["전체","수영구", "동래구", "중구"]
     let jeju = ["전체","서귀포시", "제주시", "중구"]
@@ -41,7 +41,7 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
         pickerSmall.dataSource = self
         
         //서버에서 데이터 가져오기
-//        getData(url:"http://127.0.0.1:1234/api/join_api/", filter: "")
+        getData(url:"http://127.0.0.1:1234/api/join_api/", filter: "")
     }
     
     //서버에서 json list  받을 튜플
@@ -180,7 +180,7 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
         if pickerView == pickerBig && pickerBig.selectedRow(inComponent: 0) == 1 {
            pickerSmall.selectRow(0, inComponent: 0, animated: true)
            self.selectedBig = "서울"
-           self.big = "서울"          //두번째 피커뷰 세팅 플래그 
+           self.big = "서울"          //두번째 피커뷰 세팅 플래그
            self.pickerSmall.reloadAllComponents()   //두번째 피커뷰의 항목들 리로드
             
             //기존 어레이 삭제

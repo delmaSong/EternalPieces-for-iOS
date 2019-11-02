@@ -10,26 +10,38 @@ import UIKit
 import Alamofire
 import Kingfisher
 
-class TattistWithTabBarController: UITabBarController{
+class TattistWithTabBarController: UITabBarController, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
-    let tabView = UIView()      //탭바로 사용될 뷰
-    let tabItem01 = UIButton(type: .system) //탭바에 들어갈 버튼 세개
+    let tabView = UIView()                              //탭바로 사용될 뷰
+    let tabItem01 = UIButton(type: .system)             //탭바에 들어갈 버튼 세개
     let tabItem02 = UIButton(type: .system)
     let tabItem03 = UIButton(type: .system)
     
-    let imgTop = UIImageView()      //상단 배경이미지
-    let imgProfile = UIImageView()  //타티스트 프로필 이미지
+    let imgTop = UIImageView()                          //상단 배경이미지
+    let imgProfile = UIImageView()                      //타티스트 프로필 이미지
     
-    let btnBack = UIButton(type: .system)       //뒤로가기 버튼
-    let btnChat = UIButton(type: .system)       //상담하기 버튼
-    let btnLike = UIButton(type: .system)       //좋아요 버튼
+    let btnBack = UIButton(type: .system)               //뒤로가기 버튼
+    let btnChat = UIButton(type: .system)               //상담하기 버튼
+    let btnLike = UIButton(type: .system)               //좋아요 버튼
     
-    let lblId = UILabel()       //타티스트 아이디
-    let lblIntro = UITextView()        //타티스트 셀프 소개
+    let lblId = UILabel()                               //타티스트 아이디
+    let lblIntro = UITextView()                         //타티스트 셀프 소개
+    
+    let editBtn = UIButton()                            //마이페이지 수정버튼
+    let editDoneBtn = UIButton()                        //마이페이지 수정완료버튼
+    
+    let editProfileBtn = UIButton()                     //프로필사진 수정버튼
+    let editBackBtn = UIButton()                        //배경사진 수정버튼
     
     //건네받을 타티스트 아이디
     var tattId: String = ""
-    
+    //이미지 수정시 플래그
+    var setImgFlag: Int = 0
+    //서버로 넘어갈 이미지 압축파일 변수
+    var profileImgData: Data!
+    var backImgData: Data!
+    //타티스트 고유아이디
+    var uniqueId: Int = 0
 
     
     
@@ -85,7 +97,7 @@ class TattistWithTabBarController: UITabBarController{
         
         
         //뒤로가기 버튼 설정
-        self.btnBack.frame = CGRect(x: 20, y: 40, width: 0, height: 0)
+        self.btnBack.frame = CGRect(x: 20, y: 30, width: 0, height: 0)
         self.btnBack.setTitle("back", for: .normal)
         self.btnBack.setTitleColor(UIColor.white, for: .normal)
         self.btnBack.sizeToFit()
@@ -99,13 +111,15 @@ class TattistWithTabBarController: UITabBarController{
         self.lblId.textColor = UIColor.white
         self.lblId.sizeToFit()
         
+        
         self.view.addSubview(lblId)
         
         
         //타티스트 셀프소개 레이블 설정
         self.lblIntro.frame = CGRect(x: 25 + (width * 18/83), y: (self.imgTop.frame.height * 9 / 10) + self.lblId.frame.height+5, width: width * 3 / 5, height: self.imgTop.frame.height / 4)
-        self.lblIntro.text = "타티스트 셀프 소개 들어갈 고오오오아아이이아야야야야아아와하하하하"
+        self.lblIntro.text = "타티스트 셀프 소개 들어갈 곳"
         self.lblIntro.textColor = UIColor.black
+        self.lblIntro.isEditable = false
         
         self.view.addSubview(lblIntro)
         
@@ -125,6 +139,15 @@ class TattistWithTabBarController: UITabBarController{
         
         //좋아요 버튼 설정
         
+        
+        //수정버튼 이미지
+        let editIcon: UIImage = UIImage(named:"edit_icon")!
+        //수정버튼 버튼 설정
+        self.editBtn.frame = CGRect(x:( width * 7/8), y: 30, width: 25, height:25)
+        self.editBtn.setImage(editIcon, for: .normal)
+        self.editBtn.addTarget(self, action: #selector(goEdit(_:)), for: .touchUpInside)
+
+        self.view.addSubview(editBtn)
         
         //서버에서 데이터 가져오기
         getData()
@@ -200,11 +223,17 @@ class TattistWithTabBarController: UITabBarController{
                 if let nsArray = obj as? NSArray{       //어레이 벗기면 딕셔너리
                      for bundle in nsArray{
                          if let nsDictionary = bundle as? NSDictionary{
-                             if let tId = nsDictionary["tatt_id"] as? String, let tInfo = nsDictionary["tatt_intro"] as? String, let tPhoto = nsDictionary["tatt_profile"] as? String  {
+                             if let tId = nsDictionary["tatt_id"] as? String, let tInfo = nsDictionary["tatt_intro"] as? String, let tPhoto = nsDictionary["tatt_profile"] as? String, let uniqueId = nsDictionary["id"] as? Int{
                                 self.lblId.text = tId
                                 self.lblIntro.text = tInfo
                                 self.imgProfile.kf.setImage(with: URL(string: tPhoto))
+                                self.uniqueId = uniqueId
+                             }
+                            
+                            if let bPhoto = nsDictionary["back_img"] as? String{
+                                self.imgTop.kf.setImage(with: URL(string: bPhoto))
                             }
+                            
                          }
                          
                      }
@@ -219,6 +248,113 @@ class TattistWithTabBarController: UITabBarController{
         //옵저버 제거
         NotificationCenter.default.removeObserver(self, name: .getData, object: nil)
         print("옵저버 제거되었다~~~~~")
+    }
+    
+    
+    @objc func goEdit(_ sender: UIButton){
+//        if let st = self.storyboard?.instantiateViewController(withIdentifier: "SetTattistTime") as? SetTattistTimeController{
+//            st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+//            self.present(st, animated: true)
+//        }
+        let editIcon: UIImage = UIImage(named:"edit_icon")!
+        let alert = UIAlertController(title:"알림", message: "마이페이지를 수정하겠습니까?", preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "취소", style: .cancel)
+        let ok = UIAlertAction(title: "확인", style: .default){ (action) in
+            //기존 수정 버튼 숨김
+            self.editBtn.isHidden = true
+            //기존 타티스트 소개란 편집 가능
+            self.lblIntro.isEditable = true
+            self.lblIntro.layer.borderColor = UIColor.gray.cgColor
+            self.lblIntro.layer.borderWidth = 1
+            self.lblIntro.layer.cornerRadius = 5
+            //수정 완료 버튼 생성
+            self.editDoneBtn.frame = CGRect(x:( self.view.frame.width * 7/8), y: 30, width: 50, height:50)
+            self.editDoneBtn.setTitle("완료", for: .normal)
+            self.editDoneBtn.addTarget(self, action: #selector(self.editProfile(_:)), for: .touchUpInside)
+            self.view.addSubview(self.editDoneBtn)
+            //배경사진 수정 버튼 생성
+            self.editBackBtn.frame = CGRect(x: self.view.frame.width/2 , y: self.imgTop.frame.height/2 , width: 25, height: 25)
+            self.editBackBtn.setImage(editIcon, for: .normal)
+            self.editBackBtn.addTarget(self, action: #selector(self.setImg(_:)), for: .touchUpInside)
+            self.view.addSubview(self.editBackBtn)
+            //프로필사진 수정 버튼 생성
+            self.editProfileBtn.frame = CGRect(x: 50, y: self.imgTop.frame.height, width: 25, height: 25)
+            self.editProfileBtn.setImage(editIcon, for: .normal)
+            self.editProfileBtn.tintColor = UIColor.black
+            self.editProfileBtn.backgroundColor = self.colorli
+            self.editProfileBtn.addTarget(self, action: #selector(self.setImg(_:)), for: .touchUpInside)
+            self.view.addSubview(self.editProfileBtn)
+            
+            
+        }
+        alert.addAction(cancel)
+        alert.addAction(ok)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    
+    @objc func editProfile(_ sender:UIButton){
+        //서버 호출해 마이페이지 수정 기능 구현하기
+        let params = [
+            "tatt_intro" : self.lblIntro.text!
+        ]
+        let url = "http:127.0.0.1:1234/api/join_api/"+String(self.uniqueId)+"/"
+        let headers = ["Content-Type" : "multipart/form-data"]
+        Alamofire.upload(multipartFormData: {multipartFormData in
+            for(key, value) in params{
+                multipartFormData.append(value.data(using:.utf8)!, withName: key) }
+            if self.profileImgData != nil {
+                multipartFormData.append(self.profileImgData!, withName: "tatt_profile", fileName: "profile.jpg", mimeType: "jpg/png")
+            }
+            if self.backImgData != nil {
+                multipartFormData.append(self.backImgData!, withName: "back_img", fileName: "back.jpg", mimeType: "jpg/png")
+            }
+        }, usingThreshold: UInt64.init(), to: url, method: .put, headers: headers) { result in
+            switch result {
+            case .success(let upload, _, _):
+                upload.responseJSON{ response in
+                    debugPrint(response.result.value!)  }
+            case .failure(let error):
+                print(error)
+            }//end switch
+        }
+        self.viewDidLoad()
+    }
+    
+    @objc func setImg(_ sender:UIButton){
+        //이미지선택
+        let picker = UIImagePickerController()
+        picker.sourceType = .photoLibrary
+        picker.allowsEditing = true
+        picker.delegate = self
+        self.present(picker, animated: false)
+        
+        if sender == self.editProfileBtn {
+            self.setImgFlag = 1
+        }else if sender == self.editBackBtn{
+            self.setImgFlag = 2
+        }
+    }
+    
+    //이미지 피커에서 이미지 선택하지 않았을 때 호출되는 메소드
+       func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+           picker.dismiss(animated: false)
+       }
+    
+    //이미지 피커에서 이미지 선택 시 호출되는 메소드
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: false) { () in
+            //이미지를 이미지 뷰에 표시
+            let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
+            
+            if self.setImgFlag == 1 {        //프로필 사진 세팅
+                self.imgProfile.image = img
+                self.profileImgData = img?.jpegData(compressionQuality: 0.7)
+            }else if self.setImgFlag == 2{   //배경사진 세팅
+                self.imgTop.image = img
+                self.backImgData = img?.jpegData(compressionQuality: 0.7)
+            }
+        }
     }
     
     
