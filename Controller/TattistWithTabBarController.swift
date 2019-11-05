@@ -197,7 +197,13 @@ class TattistWithTabBarController: UITabBarController, UIImagePickerControllerDe
         
         
         //noti로 데이터 전달
-        NotificationCenter.default.post(name: .getData, object: self.tattId)
+        if self.selectedIndex == 1{
+            NotificationCenter.default.post(name: .getWorkData, object: self.tattId)
+        }else if self.selectedIndex == 2 {
+            NotificationCenter.default.post(name: .getReviewData, object: self.tattId)
+        }else {
+            NotificationCenter.default.post(name: .getData, object: self.tattId)
+        }
 
         
         
@@ -247,6 +253,8 @@ class TattistWithTabBarController: UITabBarController, UIImagePickerControllerDe
     override func viewDidDisappear(_ animated: Bool) {
         //옵저버 제거
         NotificationCenter.default.removeObserver(self, name: .getData, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .getReviewData, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .getWorkData, object: nil)
         print("옵저버 제거되었다~~~~~")
     }
     
@@ -363,4 +371,6 @@ class TattistWithTabBarController: UITabBarController, UIImagePickerControllerDe
 //옵저버에 이름 추가
 extension Notification.Name{
     static let getData = Notification.Name("getData")
+    static let getReviewData = Notification.Name("getReviewData")
+    static let getWorkData = Notification.Name("getWorkData")
 }

@@ -115,4 +115,11 @@ class UploadReviewController: UIViewController, UIImagePickerControllerDelegate,
             })
         //}
     }
+    
+    
+    
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: .getDId, object: nil)
+    }
 }

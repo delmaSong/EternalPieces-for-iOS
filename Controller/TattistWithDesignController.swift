@@ -31,12 +31,17 @@ class TattistWithDesignController: UIViewController, UICollectionViewDataSource,
         collectionView.delegate = self
         collectionView.dataSource = self
     
-         NotificationCenter.default.addObserver(self, selector: #selector(getData), name: .getData, object: nil)
+         NotificationCenter.default.addObserver(self, selector: #selector(getDesignData), name: .getData, object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+          //기존 어레이 삭제 for 중복제거
+          self.dataArray.removeAll()
+      }
     
     
-    @objc func getData(_ notification: Notification){
+    
+    @objc func getDesignData(_ notification: Notification){
         let tattId = notification.object as! String
         let url = "http:127.0.0.1:1234/api/upload-design/?tatt_id="
         let doNetwork = Alamofire.request(url+tattId)
@@ -56,8 +61,6 @@ class TattistWithDesignController: UIViewController, UICollectionViewDataSource,
                         self.dataArray.insert(self.dataTuple, at: self.num)
                         self.num += 1
                     }
-                    //컬렉션뷰 데이터 리로드
-                    self.collectionView.reloadData()
                 }
             case .failure(let e):
                 print(e.localizedDescription)
@@ -76,7 +79,10 @@ class TattistWithDesignController: UIViewController, UICollectionViewDataSource,
                 }
                 return datalist
             }()
+            //컬렉션뷰 데이터 리로드
+           self.collectionView.reloadData()
         }
+        self.num = 0
     }
 
     

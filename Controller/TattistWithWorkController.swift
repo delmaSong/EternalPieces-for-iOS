@@ -28,8 +28,13 @@ class TattistWithWorkController: UIViewController, UICollectionViewDelegate, UIC
         collectionView.dataSource = self
         collectionView.delegate = self
 
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(getData), name: .getData, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(getData), name: .getWorkData, object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        //기존 어레이 삭제 for 중복제거
+        self.dataArray.removeAll()
     }
     
     
@@ -53,8 +58,6 @@ class TattistWithWorkController: UIViewController, UICollectionViewDelegate, UIC
                           self.dataArray.insert(self.dataTuple, at: self.num)
                           self.num += 1
                       }
-                      //컬렉션뷰 데이터 리로드
-                      self.collectionView.reloadData()
                   }
               case .failure(let e):
                   print(e.localizedDescription)
@@ -73,7 +76,10 @@ class TattistWithWorkController: UIViewController, UICollectionViewDelegate, UIC
                   }
                   return datalist
               }()
+            //컬렉션뷰 데이터 리로드
+          self.collectionView.reloadData()
           }
+        self.num = 0
       }
     
   
