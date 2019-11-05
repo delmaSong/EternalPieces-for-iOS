@@ -134,7 +134,6 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
             
             lmc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
             lmc.tattId = row.tattistId!
-            print("넘어가는 타티스트 아디 \(row.tattistId!)")
             self.present(lmc, animated: true)
         
         }

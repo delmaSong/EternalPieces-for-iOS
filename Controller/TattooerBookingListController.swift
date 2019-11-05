@@ -108,6 +108,9 @@ class TattooerBookingListController: UIViewController, UITableViewDelegate, UITa
         cell.bodyPart?.text = row.bodyPart
         cell.size?.text = row.size
         cell.request?.text = row.request
+        cell.reviewBtn.tag = indexPath.row
+        cell.reviewBtn.addTarget(self, action: #selector(goToReview(_ :)), for: .touchUpInside)
+        
         
         return cell
     }
@@ -116,4 +119,32 @@ class TattooerBookingListController: UIViewController, UITableViewDelegate, UITa
     @IBAction func goToBookingList(_segue: UIStoryboardSegue){
         
     }
+    
+   
+    
+    //리뷰 쓰러 이동
+    @objc func goToReview(_ sender: UIButton) {
+        let data = self.list[sender.tag]
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .getDId, object: data.tattist! ) }
+            if let st = self.storyboard?.instantiateViewController(withIdentifier: "UploadReview") as? UploadReviewController{
+            st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+            self.present(st, animated: true)
+        }
+    }
+    
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        //옵저버 제거
+        NotificationCenter.default.removeObserver(self, name: .getDId, object: nil)
+    }
+    
+    
+    
+    
+}
+
+//옵저버에 이름추가
+extension Notification.Name{
+    static let getDId = Notification.Name("getDId")
 }

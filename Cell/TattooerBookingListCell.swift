@@ -37,4 +37,7 @@ class TattooerBookingListCell: UITableViewCell{
     
     //요청사항
     @IBOutlet var request: UILabel!
+    
+    //리뷰 작성 버튼
+    @IBOutlet var reviewBtn: UIButton!
 }
