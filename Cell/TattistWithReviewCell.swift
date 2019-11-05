@@ -21,9 +21,11 @@ class TattistWithReviewCell: UITableViewCell{
     @IBOutlet var img3: UIImageView!
     let ratingvar: CosmosView = CosmosView()
     
+    @IBOutlet var editBtn: UIButton!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.contents.isEditable = false 
+        self.contents.isEditable = false
         let colorli = #colorLiteral(red: 0.394319929, green: 0.536441238, blue: 0.6976721129, alpha: 1)
         //별점바 세팅
         self.ratingvar.frame = CGRect(x: contentView.frame.width-120, y:10, width: 40, height: 25)

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-struct TattistWithReviewVO {
+class TattistWithReviewVO {
     
     var title: String?
     var contents: String?
@@ -17,5 +17,6 @@ struct TattistWithReviewVO {
     var img2: String?
     var img3: String?
     var rate: String?
+    var id: Int?
     
 }

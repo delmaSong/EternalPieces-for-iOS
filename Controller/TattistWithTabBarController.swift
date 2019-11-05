@@ -52,7 +52,7 @@ class TattistWithTabBarController: UITabBarController, UIImagePickerControllerDe
         let width = self.view.frame.width
         let height : CGFloat = 50
         
-        //상단 이미지 설정
+        //배경 이미지 설정
         self.imgTop.frame = CGRect(x: 0, y: 0, width: width, height: self.view.frame.height / 4)
         self.imgTop.image = UIImage(named: "tattooGun")
         //self.imgTop.contentMode = .scaleAspectFill

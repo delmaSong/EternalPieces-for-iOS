@@ -111,8 +111,20 @@ class DesignDetailController: UIViewController {
                 let deleteURL = "http:127.0.0.1:1234/api/upload-design/" + String(self.designId) + "/"
                 Alamofire.request(deleteURL, method: .delete)
                 
-                //다른 화면으로 이동
-                //타티스트 페이지로 or 더보기 탭
+                
+                //삭제가 완료되었습니다 알럿
+                let alert2 = UIAlertController(title:"알림", message:"삭제가 완료되었습니다", preferredStyle: .alert)
+                let ok2 = UIAlertAction(title:"확인", style: .default){ action in
+                    //다른 화면으로 이동
+                    if let st = self.storyboard?.instantiateViewController(withIdentifier: "FindStyle") as? FindStyleViewController{
+                        
+                        st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+                    
+                        self.present(st, animated: true)
+                    }
+                }
+                alert2.addAction(ok2)
+                self.present(alert2, animated: true)
             }
             let cancel = UIAlertAction(title: "취소", style: .cancel)
             alert.addAction(ok)

@@ -266,13 +266,6 @@
                                                     <rect key="frame" x="290" y="139" width="105" height="105"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="후기 제목 담길 곳" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LEs-up-MWi">
-                                                    <rect key="frame" x="24" y="11" width="157" height="22"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="작성자" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e6m-ew-yon">
                                                     <rect key="frame" x="24" y="38" width="37" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -280,11 +273,24 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="후기 제목 담길 곳" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LEs-up-MWi">
+                                                    <rect key="frame" x="24" y="11" width="157" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iSm-Wk-qOa">
+                                                    <rect key="frame" x="370" y="219" width="25" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="edit_icon"/>
+                                                </button>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="contents" destination="I4C-8g-vnX" id="Zqw-YF-xRA"/>
                                             <outlet property="date" destination="H6i-f5-fqq" id="m28-bE-gMt"/>
+                                            <outlet property="editBtn" destination="iSm-Wk-qOa" id="g2e-4y-VfZ"/>
                                             <outlet property="img1" destination="ogR-hM-lLc" id="tKe-ZF-OEr"/>
                                             <outlet property="img2" destination="qMT-44-Xus" id="0JD-IV-TMt"/>
                                             <outlet property="img3" destination="2cr-Bm-nmO" id="A9Q-al-E13"/>
@@ -4248,6 +4254,7 @@
         <image name="chevron.right" catalog="system" width="48" height="64"/>
         <image name="codog.jpeg" width="640" height="640"/>
         <image name="defaultImg" width="300" height="300"/>
+        <image name="edit_icon" width="100" height="100"/>
         <image name="emptyHeart.png" width="100" height="100"/>
         <image name="filledHeart.png" width="100" height="100"/>
         <image name="findStyle" width="350" height="74"/>

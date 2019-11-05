@@ -16,13 +16,14 @@ class TattistWithReviewController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet var tableView: UITableView!
     
     //서버에서 json list  받을 튜플
-    var dataTuple : (rTitle: String, rContents: String ,rWriter: String, rDate: String, rPhoto: String, rRate: String) = ("", "", "", "", "", "")
+    var dataTuple : (rTitle: String, rContents: String ,rWriter: String, rDate: String, rPhoto: String, rRate: String, rId:Int) = ("", "", "", "", "", "", 0)
     //서버에서 json list 받을 어레이.
-    var dataArray : [(String, String, String, String, String, String)] = []
+    var dataArray : [(String, String, String, String, String, String, Int)] = []
     //어레이 인서트시 사용할 인덱스
     var num: Int = 0
     //컬렉션뷰에 넣어줄 데이터 리스트
     var list: [TattistWithReviewVO] = []
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,8 +57,9 @@ class TattistWithReviewController: UIViewController, UITableViewDelegate, UITabl
                                     let rWriter = nsDictionary["rv_writer"] as? String,
                                     let rDate = nsDictionary["rv_date"] as? String,
                                     let rPhoto = nsDictionary["rv_photo"] as? String,
-                                    let rRate = nsDictionary["rv_rate"] as? String {
-                                    self.dataTuple = (rTitle, rContents, rWriter, rDate, rPhoto, rRate)   //튜플에 데이터삽입
+                                    let rRate = nsDictionary["rv_rate"] as? String,
+                                    let rId = nsDictionary["id"] as? Int{
+                                    self.dataTuple = (rTitle, rContents, rWriter, rDate, rPhoto, rRate, rId)   //튜플에 데이터삽입
                                 }
                             }
                             
@@ -73,7 +75,7 @@ class TattistWithReviewController: UIViewController, UITableViewDelegate, UITabl
               self.list = {
                  var datalist = [TattistWithReviewVO]()
                   
-                  for(rTitle, rContents, rWriter, rDate, rPhoto, rRate) in self.dataArray{
+                  for(rTitle, rContents, rWriter, rDate, rPhoto, rRate, rId) in self.dataArray{
                       var tvo = TattistWithReviewVO()
                     tvo.title = rTitle
                     tvo.contents = rContents
@@ -81,6 +83,7 @@ class TattistWithReviewController: UIViewController, UITableViewDelegate, UITabl
                     tvo.date = rDate
                     tvo.img1 = rPhoto
                     tvo.rate = rRate
+                    tvo.id = rId
                       
                       datalist.append(tvo)
                   }
@@ -108,6 +111,8 @@ class TattistWithReviewController: UIViewController, UITableViewDelegate, UITabl
         cell.writer?.text = row.writer
         cell.date?.text = row.date
         cell.ratingvar.rating = Double(row.rate!)!
+        cell.editBtn.tag = indexPath.row
+        cell.editBtn.addTarget(self, action: #selector(goEdit(_:)), for: .touchUpInside)
         cell.img1.kf.setImage(with: URL(string:row.img1!))
 //        cell.img1.image = UIImage(named: row.img1!)
 //        cell.img2.image = UIImage(named: row.img2!)
@@ -116,7 +121,46 @@ class TattistWithReviewController: UIViewController, UITableViewDelegate, UITabl
         return cell
     }
     
+    @objc func goEdit(_ sender: UIButton){
+        let data = self.list[sender.tag]
+        //알럿 띄워서 수정 or 삭제 or 취소로 분기
+        let alert = UIAlertController(title:"알림", message: "기능을 선택해주세요", preferredStyle: .alert)
+               let cancel = UIAlertAction(title: "취소", style: .cancel)
+        let edit = UIAlertAction(title: "수정", style: .default){ (action) in
+            //페이지 이동
+            if let st = self.storyboard?.instantiateViewController(withIdentifier: "UploadReview") as? UploadReviewController {
+                st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+                st.editFlag = 1
+                self.present(st, animated: true)
+            }
+        }
+        let delete = UIAlertAction(title:"삭제", style: .default){ (action) in
+            let dAlert = UIAlertController(title: "삭제", message:"정말 리뷰를 삭제하시겠습니까?", preferredStyle: .alert)
+            let ok = UIAlertAction(title:"확인", style: .default){ (action) in
+                //삭제기능 구현
+                let deleteURL = "http:127.0.0.1:1234/api/review/" + String(data.id!) + "/"
+               Alamofire.request(deleteURL, method: .delete)
+
+                //리스트에서 삭제된 항목 제거해주고 테이블뷰 리로드
+                if let index = self.list.firstIndex(where: {$0.id == data.id }){
+                   self.list.remove(at: index)
+                    self.tableView.reloadData()
+                }
+                
+            }
+            dAlert.addAction(cancel)
+            dAlert.addAction(ok)
+            self.present(dAlert, animated:true)
+        }
+        
+        alert.addAction(cancel)
+        alert.addAction(edit)
+        alert.addAction(delete)
+        self.present(alert, animated:true)
+    }
     
  
     
 }
+
+

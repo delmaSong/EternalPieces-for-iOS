@@ -23,6 +23,7 @@ class UploadReviewController: UIViewController, UIImagePickerControllerDelegate,
     var imgData: Data!          //이미지 압축파일 변수
     var tId: String = ""        //tattist id
     var rating: Double = 0
+    var editFlag: Int = 0       //1이면 수정
     
     override func viewDidLoad() {
         self.contents.layer.borderWidth = 0.5
@@ -107,12 +108,17 @@ class UploadReviewController: UIViewController, UIImagePickerControllerDelegate,
                 switch encodingResult {
                 case .success(let upload, _, _):
                     upload.responseJSON{ response in
-                        debugPrint(response.result.value!)
-                    }
+                        debugPrint(response.result.value!) }
+                    //화면이동
+                       if let st = self.storyboard?.instantiateViewController(withIdentifier: "SettingView") as? SettingController{
+                       st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+                       self.present(st, animated: true) }
                 case .failure(let encodingError):
                     print(encodingError)
                 }
             })
+        
+    
         //}
     }
     
