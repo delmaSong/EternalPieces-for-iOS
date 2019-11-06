@@ -23,7 +23,10 @@ class UploadReviewController: UIViewController, UIImagePickerControllerDelegate,
     var imgData: Data!          //이미지 압축파일 변수
     var tId: String = ""        //tattist id
     var rating: Double = 0
+    
+    //수정하러 들어왔을 시 필요한 데이터
     var editFlag: Int = 0       //1이면 수정
+    var rId: Int = 0
     
     override func viewDidLoad() {
         self.contents.layer.borderWidth = 0.5
@@ -42,7 +45,42 @@ class UploadReviewController: UIViewController, UIImagePickerControllerDelegate,
             self.rating = rating
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(getDId), name: .getDId, object: nil)
+        if editFlag == 0 {      //새롭게 작성하러 들어왔을 시
+            NotificationCenter.default.addObserver(self, selector: #selector(getDId), name: .getDId, object: nil)
+        }else {     //수정하러 왔을 시
+            let url = "http:127.0.0.1:1234/api/review/"
+            let doNetwork = Alamofire.request(url+String(self.rId))
+            doNetwork.responseJSON{(response) in
+                switch response.result{
+                case .success(let obj):
+                    if obj is NSDictionary{
+                       do{
+                           let dataJSON = try JSONSerialization.data(withJSONObject: obj, options: .prettyPrinted)
+                           let respData = try  JSONDecoder().decode(TattistWithReviewVO.self, from: dataJSON)
+                           //각 항목에 셋팅해준다
+                        self.reviewTitle.text = respData.rv_title!
+                        self.contents.text = respData.rv_contents!
+                        self.stars.rating = Double(respData.rv_rate!)!
+                        self.tId = respData.rv_tatt!
+
+                           
+                       //kingfisher로 이미지 세팅
+                        let url = "http:127.0.0.1:1234"
+                        let imgURL = URL(string: url+respData.rv_photo!)
+                        self.imgView.kf.setImage(with: imgURL)
+                        self.imgData = try? Data(contentsOf: imgURL!)
+                           
+ 
+                       }catch{
+                           print(error.localizedDescription)
+                       }
+                   }
+                case .failure(let e):
+                    print(e.localizedDescription)
+                }
+            }
+        }
+        
         
     }
     
@@ -80,46 +118,83 @@ class UploadReviewController: UIViewController, UIImagePickerControllerDelegate,
     //리뷰 업로드
     @IBAction func upload(_ sender: UIButton) {
         //제목 or 내용 미입력시
-//        if self.reviewTitle.text == "" || self.contents.text == "" {
-//            let alert = UIAlertController(title:"알림!", message: "항목을 모두 입력해주세요", preferredStyle: UIAlertController.Style.alert)
-//                       let defaultAction = UIAlertAction(title: "OK", style: .default){
-//                           (action) in
-//                       }
-//                       alert.addAction(defaultAction)
-//                       present(alert, animated: true, completion: nil)
-//        }else {
+        if self.reviewTitle.text == "" || self.contents.text == "" {
+            let alert = UIAlertController(title:"알림!", message: "항목을 모두 입력해주세요", preferredStyle: UIAlertController.Style.alert)
+                       let defaultAction = UIAlertAction(title: "OK", style: .default){
+                           (action) in
+                       }
+                       alert.addAction(defaultAction)
+                       present(alert, animated: true, completion: nil)
+        }else {
             let params = [
                 "rv_writer" : "fff",        //현재 로그인한 사용자로 변경필요
-                "rv_title" : "텍스트필드프리징..",   //self.reviewTitle.text!,
-                "rv_contents" : "텍스트뷰 프리징 ",    //self.contents.text!,
+                "rv_title" : self.reviewTitle.text!,
+                "rv_contents" : self.contents.text!,
                 "rv_rate" : String(format:"%.1f", self.rating),
                 "rv_tatt" : self.tId
             ] as [String : Any]
+         
+        var url = "http:127.0.0.1:1234/api/review/"
             
-            let url = "http:127.0.0.1:1234/api/review/"
+        if editFlag == 0 {      //리뷰 새로 업로드라면
+                Alamofire.upload(multipartFormData: {multipartFormData in
+                    for (key,value) in params {
+                            multipartFormData.append((value as! String).data(using: .utf8)!, withName: key)
+                    }
+                    if self.imgData != nil{
+                        multipartFormData.append(self.imgData!, withName: "rv_photo", fileName: "photo.jpg", mimeType: "jpg/png")
+                    }
+                }, to: url, encodingCompletion: { encodingResult in
+                    switch encodingResult {
+                    case .success(let upload, _, _):
+                        upload.responseJSON{ response in
+                            debugPrint(response.result.value!) }
+                        //화면이동
+                           if let st = self.storyboard?.instantiateViewController(withIdentifier: "SettingView") as? SettingController{
+                           st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+                           self.present(st, animated: true) }
+                    case .failure(let encodingError):
+                        print(encodingError)
+                    }
+                })
+            }else {      //리뷰 수정이라면
+            url = url + String(self.rId) + "/"
+            let headers = [ "Content-Type" : "multipart/form-data" ]
+
+            //서버 호출
             Alamofire.upload(multipartFormData: {multipartFormData in
                 for (key,value) in params {
-                        multipartFormData.append((value as! String).data(using: .utf8)!, withName: key)
+                    multipartFormData.append((value as! String).data(using: .utf8)!, withName: key)
                 }
-                if self.imgData != nil{
-                    multipartFormData.append(self.imgData!, withName: "rv_photo", fileName: "photo.jpg", mimeType: "jpg/png")
-                }
-            }, to: url, encodingCompletion: { encodingResult in
-                switch encodingResult {
+                      multipartFormData.append(self.imgData!, withName: "rv_photo", fileName: "photo.jpg", mimeType: "image/jpeg")
+                
+            }, usingThreshold: UInt64.init(), to: url, method: .put, headers: headers) { result in
+                switch result {
                 case .success(let upload, _, _):
                     upload.responseJSON{ response in
-                        debugPrint(response.result.value!) }
-                    //화면이동
-                       if let st = self.storyboard?.instantiateViewController(withIdentifier: "SettingView") as? SettingController{
-                       st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
-                       self.present(st, animated: true) }
-                case .failure(let encodingError):
-                    print(encodingError)
-                }
-            })
+                        debugPrint(response.result.value!)  }
+                case .failure(let error):
+                    print(error)
+                }//end switch
+            }
         
+        }
+        let alert = UIAlertController(title: "", message: "리뷰 업로드가 완료되었습니다", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "확인", style: .default){
+            action in
+//            if let st = self.storyboard?.instantiateViewController(withIdentifier: "DesignDetailView") as? DesignDetailController{
+//
+//                //업로드한 도안 아이디를 다음 화면으로 전달
+//                st.designId = self.designId!
+//                st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+//
+//                self.present(st, animated: true)
+            }
+
+        alert.addAction(ok)
+        self.present(alert, animated: true)
     
-        //}
+        }
     }
     
     

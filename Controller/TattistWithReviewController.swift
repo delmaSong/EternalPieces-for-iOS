@@ -77,12 +77,12 @@ class TattistWithReviewController: UIViewController, UITableViewDelegate, UITabl
                   
                   for(rTitle, rContents, rWriter, rDate, rPhoto, rRate, rId) in self.dataArray{
                       var tvo = TattistWithReviewVO()
-                    tvo.title = rTitle
-                    tvo.contents = rContents
-                    tvo.writer = rWriter
-                    tvo.date = rDate
-                    tvo.img1 = rPhoto
-                    tvo.rate = rRate
+                    tvo.rv_title = rTitle
+                    tvo.rv_contents = rContents
+                    tvo.rv_writer = rWriter
+                    tvo.rv_date = rDate
+                    tvo.rv_photo = rPhoto
+                    tvo.rv_rate = rRate
                     tvo.id = rId
                       
                       datalist.append(tvo)
@@ -105,18 +105,14 @@ class TattistWithReviewController: UIViewController, UITableViewDelegate, UITabl
         let row = self.list[indexPath.row]
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "TattistWithReviewCell") as! TattistWithReviewCell
-        
-        cell.title?.text = row.title
-        cell.contents?.text = row.contents
-        cell.writer?.text = row.writer
-        cell.date?.text = row.date
-        cell.ratingvar.rating = Double(row.rate!)!
+        cell.title?.text = row.rv_title
+        cell.contents?.text = row.rv_contents
+        cell.writer?.text = row.rv_writer
+        cell.date?.text = row.rv_date
+        cell.ratingvar.rating = Double(row.rv_rate!)!
         cell.editBtn.tag = indexPath.row
         cell.editBtn.addTarget(self, action: #selector(goEdit(_:)), for: .touchUpInside)
-        cell.img1.kf.setImage(with: URL(string:row.img1!))
-//        cell.img1.image = UIImage(named: row.img1!)
-//        cell.img2.image = UIImage(named: row.img2!)
-//        cell.img3.image = UIImage(named: row.img3!)
+        cell.img1.kf.setImage(with: URL(string:row.rv_photo!))
     
         return cell
     }
@@ -131,6 +127,7 @@ class TattistWithReviewController: UIViewController, UITableViewDelegate, UITabl
             if let st = self.storyboard?.instantiateViewController(withIdentifier: "UploadReview") as? UploadReviewController {
                 st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
                 st.editFlag = 1
+                st.rId = data.id!
                 self.present(st, animated: true)
             }
         }

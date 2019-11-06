@@ -7,16 +7,17 @@
 //
 
 import Foundation
-class TattistWithReviewVO {
+class TattistWithReviewVO: Codable {
     
-    var title: String?
-    var contents: String?
-    var writer: String?
-    var date: String?
-    var img1: String?
-    var img2: String?
-    var img3: String?
-    var rate: String?
+    var rv_title: String?
+    var rv_contents: String?
+    var rv_writer: String?
+    var rv_date: String?
+    var rv_photo: String?
+//    var img2: String?
+//    var img3: String?
+    var rv_rate: String?
     var id: Int?
+    var rv_tatt: String?
     
 }

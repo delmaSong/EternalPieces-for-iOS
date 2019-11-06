@@ -75,8 +75,8 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
                             
                             //기존 선택한 스타일에 맞게 피커뷰 셋팅
                             let seq = self.style_list.firstIndex(of: respData.design_style!)
-                            self.pickerView(self.pick_style, didSelectRow: seq!, inComponent: 0)
-                            self.pickedRow = seq!
+                            self.pickerView(self.pick_style, didSelectRow: seq ?? 0, inComponent: 0)
+                            self.pickedRow = seq
                         }catch{
                             print(error.localizedDescription)
                         }
@@ -226,9 +226,7 @@ class UploadDesignController: UIViewController, UIImagePickerControllerDelegate,
                 
             }else{      //editFlag == true 도안 수정하기 위한거면
                 url = "http://127.0.0.1:1234/api/upload-design/" + String(editId!) + "/"
-                let headers = [
-                    "Content-Type" : "multipart/form-data"
-                ]
+                let headers = [ "Content-Type" : "multipart/form-data" ]
                 
                 //서버 호출
                 Alamofire.upload(multipartFormData: {multipartFormData in

@@ -98,9 +98,11 @@ class PayController: UIViewController{
                 let alert = UIAlertController(title: "예약이 완료되었습니다", message: "", preferredStyle: .alert)
                 let action = UIAlertAction(title: "확인", style: .default){
                     (action) in
+                    self.definesPresentationContext = true
                     if let st = self.storyboard?.instantiateViewController(withIdentifier: "FindStyle") as? FindStyleViewController{        //추후 본인의 예약정보 보여주는 화면으로 이동하도록 
                     
-                    st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+//                    st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+                        st.modalPresentationStyle = .currentContext
                     self.present(st, animated: true)
 
                     }
