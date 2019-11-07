@@ -42,12 +42,18 @@ class TattistWithTabBarController: UITabBarController, UIImagePickerControllerDe
     var backImgData: Data!
     //타티스트 고유아이디
     var uniqueId: Int = 0
-
+    //좋아하는 타티스트 담을 어레이
+    var likeArray: [String] = []
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tabBar.isHidden = true     //기존 탭바 숨겨줌
+        
+        //서버에서 데이터 가져오기
+         getData()
+         getLikeData()
+        
         
         let width = self.view.frame.width
         let height : CGFloat = 50
@@ -123,6 +129,12 @@ class TattistWithTabBarController: UITabBarController, UIImagePickerControllerDe
         
         self.view.addSubview(lblIntro)
         
+        //좋아요 버튼 설정
+        self.btnLike.frame = CGRect(x:(self.imgTop.frame.width * 7 / 8 ) + 10 ,y:(self.imgTop.frame.height * 9 / 10) - 45 ,width:25 , height:25)
+        self.btnLike.setImage(UIImage(named: "emptyHeart.png"), for: .normal)
+        self.btnLike.tintColor = UIColor.red
+        self.btnLike.addTarget(self, action: #selector(doLike(_:)), for: .touchUpInside)
+        self.view.addSubview(btnLike)
    
         //상담하기 버튼 설정
         self.btnChat.frame = CGRect(x: (self.imgTop.frame.width * 7 / 8 ) - 5, y: (self.imgTop.frame.height * 9 / 10) - 10, width: 0, height: 0)
@@ -137,7 +149,6 @@ class TattistWithTabBarController: UITabBarController, UIImagePickerControllerDe
         
         self.view.addSubview(btnChat)
         
-        //좋아요 버튼 설정
         
         
         //수정버튼 이미지
@@ -149,8 +160,7 @@ class TattistWithTabBarController: UITabBarController, UIImagePickerControllerDe
 
         self.view.addSubview(editBtn)
         
-        //서버에서 데이터 가져오기
-        getData()
+     
     
     }
     
@@ -218,7 +228,7 @@ class TattistWithTabBarController: UITabBarController, UIImagePickerControllerDe
     }
     
     
-    
+    //MARK: - 서버와 호출
     //서버에서 데이터 가져오기
     func getData(){
         let url = "http:127.0.0.1:1234/api/join_api/?tatt_id="
@@ -234,11 +244,15 @@ class TattistWithTabBarController: UITabBarController, UIImagePickerControllerDe
                                 self.lblIntro.text = tInfo
                                 self.imgProfile.kf.setImage(with: URL(string: tPhoto))
                                 self.uniqueId = uniqueId
+                               
                              }
                             
                             if let bPhoto = nsDictionary["back_img"] as? String{
                                 self.imgTop.kf.setImage(with: URL(string: bPhoto))
                             }
+//                            if self.likeArray.contains(String(self.uniqueId)){
+//                               self.btnLike.setImage(UIImage(named: "filledHeart.png"), for: .normal)
+//                           }
                             
                          }
                          
@@ -250,6 +264,53 @@ class TattistWithTabBarController: UITabBarController, UIImagePickerControllerDe
         }
     }
     
+    //기존 좋아요 정보 가져오기
+    func getLikeData(){
+        let url = "http:127.0.0.1:1234/api/likes/?user="
+              let user = "1111"       //현재 로그인한 유저 아이디
+              let doNetwork = Alamofire.request(url+user)
+              doNetwork.responseJSON { (response) in
+                  switch response.result{
+                  case .success(let obj):
+                      if let nsArray = obj as? NSArray{       //array 벗김
+                                  for bundle in nsArray {
+                                      if let nsDictionary = bundle as? NSDictionary{         //dictionary 벗겨서 튜플에 각 데이터 삽입
+                                          if let like_tattist = nsDictionary["like_tattist"] as? String{
+                                              self.likeArray.append(like_tattist)
+                                          }
+                                      }
+                                  }
+                                if self.likeArray.contains(String(self.uniqueId)){
+                                   self.btnLike.setImage(UIImage(named: "filledHeart.png"), for: .normal)
+                               }
+                              }
+                  case .failure(let e):
+                      print(e.localizedDescription)
+                  }
+              }
+    }
+    
+    //좋아요 버튼 선택시
+    @objc func doLike(_ sender: UIButton){
+        var url = "http:127.0.0.1:1234/api/likes/"
+        
+        if !self.likeArray.contains(String(uniqueId)){   //안좋아했던 타티스트면
+            sender.setImage(UIImage(named:"filledHeart.png"), for: .normal)
+            let params = [ "user" : "1111", "like_tattist": String(uniqueId) ] as [String : Any]
+            Alamofire.request(url, method: .post, parameters: params, encoding: JSONEncoding.default)
+            self.likeArray.append(String(uniqueId))
+        }else{  //좋아했던 타티스트면
+            sender.setImage(UIImage(named:"emptyHeart.png"), for: .normal)
+            url = url + "?user=" + String("1111") + "&like_tattist=" + String(uniqueId)
+            Alamofire.request(url, method: .get)
+            if let index = self.likeArray.firstIndex(of: String(uniqueId)){
+                          self.likeArray.remove(at: index)
+                      }
+        }//else
+    }
+    
+    
+    
     override func viewDidDisappear(_ animated: Bool) {
         //옵저버 제거
         NotificationCenter.default.removeObserver(self, name: .getData, object: nil)
@@ -258,7 +319,7 @@ class TattistWithTabBarController: UITabBarController, UIImagePickerControllerDe
         print("옵저버 제거되었다~~~~~")
     }
     
-    
+    //MARK: - 마이페이지 수정기능 관련
     @objc func goEdit(_ sender: UIButton){
 //        if let st = self.storyboard?.instantiateViewController(withIdentifier: "SetTattistTime") as? SetTattistTimeController{
 //            st.modalTransitionStyle = UIModalTransitionStyle.coverVertical

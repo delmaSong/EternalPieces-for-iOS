@@ -1159,14 +1159,17 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Ps-3S-YG9">
-                                        <rect key="frame" x="344" y="373" width="30" height="25"/>
+                                        <rect key="frame" x="349" y="372" width="25" height="25"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="30" id="H5c-8q-tLO"/>
+                                            <constraint firstAttribute="width" constant="25" id="H5c-8q-tLO"/>
                                         </constraints>
                                         <color key="tintColor" red="0.80044416240000005" green="0.2472920435" blue="0.20724295240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" image="emptyHeart.png">
                                             <color key="titleColor" red="0.80044416240000005" green="0.2472920435" blue="0.20724295240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="doLike:" destination="bLD-Oa-fcp" eventType="touchUpInside" id="agj-YV-3T1"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1191,9 +1194,9 @@
                                     <constraint firstItem="XxI-pN-iKL" firstAttribute="centerY" secondItem="Uz8-CA-19Y" secondAttribute="centerY" constant="-1" id="RiS-gS-XJ4"/>
                                     <constraint firstItem="fl6-D8-aJw" firstAttribute="leading" secondItem="2l0-EH-FcF" secondAttribute="leadingMargin" id="Snf-sc-tbP"/>
                                     <constraint firstItem="Uz8-CA-19Y" firstAttribute="leading" secondItem="vrf-J8-xSF" secondAttribute="leading" constant="215" id="VW9-ga-5pb"/>
-                                    <constraint firstItem="YIL-tK-kW6" firstAttribute="top" secondItem="6Ps-3S-YG9" secondAttribute="bottom" constant="12" id="WJg-4h-4J2"/>
+                                    <constraint firstItem="YIL-tK-kW6" firstAttribute="top" secondItem="6Ps-3S-YG9" secondAttribute="bottom" constant="13" id="WJg-4h-4J2"/>
                                     <constraint firstItem="Ixl-NR-8oO" firstAttribute="centerY" secondItem="6xT-PI-AFS" secondAttribute="centerY" constant="-1" id="WfQ-zG-SUO"/>
-                                    <constraint firstItem="6Ps-3S-YG9" firstAttribute="centerY" secondItem="2l0-EH-FcF" secondAttribute="centerY" constant="1.5" id="ZJA-E9-2X0"/>
+                                    <constraint firstItem="6Ps-3S-YG9" firstAttribute="centerY" secondItem="2l0-EH-FcF" secondAttribute="centerY" constant="0.5" id="ZJA-E9-2X0"/>
                                     <constraint firstItem="Ixl-NR-8oO" firstAttribute="leading" secondItem="6xT-PI-AFS" secondAttribute="trailing" constant="8" symbolic="YES" id="ZYv-m3-MBr"/>
                                     <constraint firstAttribute="trailing" secondItem="K3o-Ke-Qfi" secondAttribute="trailing" constant="22" id="aS9-pE-gaw"/>
                                     <constraint firstItem="Ixl-NR-8oO" firstAttribute="top" secondItem="6je-FP-Dv1" secondAttribute="bottom" constant="14" id="api-0r-ijE"/>
@@ -1265,6 +1268,7 @@
                         <outlet property="designName" destination="Hz6-Nl-aA2" id="FBQ-J6-kMj"/>
                         <outlet property="design_desc" destination="m8k-nJ-gzC" id="g93-pS-EDq"/>
                         <outlet property="editBtn" destination="h1I-u2-24u" id="BYa-HC-he7"/>
+                        <outlet property="likeBtn" destination="6Ps-3S-YG9" id="kAe-x8-CF3"/>
                         <outlet property="price" destination="XxI-pN-iKL" id="kps-RX-1nn"/>
                         <outlet property="profile" destination="09z-5J-kD6" id="YK5-7M-vQK"/>
                         <outlet property="size" destination="6je-FP-Dv1" id="U2g-9B-HAX"/>
