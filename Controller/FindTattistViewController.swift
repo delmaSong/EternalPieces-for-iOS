@@ -42,21 +42,46 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
         
         //서버에서 데이터 가져오기
         getData(url:"http://127.0.0.1:1234/api/join_api/", filter: "")
+        getLikeData()   //좋아요데이터 가져오기
     }
     
     //서버에서 json list  받을 튜플
-    var dataTuple : (tId: String, tInfo: String, tPhoto: String) = ("", "", "")
+    var dataTuple : (tId: String, tInfo: String, tPhoto: String, qId: Int) = ("", "", "", 0)
     //서버에서 json list 받을 어레이.
-    var dataArray : [(String, String, String)] = []
+    var dataArray : [(String, String, String, Int)] = []
     //어레이 인서트시 사용할 인덱스
     var num: Int = 0
     //컬렉션뷰에 넣어줄 데이터 리스트
     var list: [FindTattistVO] = []
 
 
-
+    //좋아하는 타티스트 담을 어레이
+    var likeArray: [String] = []
     
 
+//MARK: - 서버에서 데이터 호출
+    //좋아요 데이터 가져오기
+    func getLikeData(){
+        let url = "http:127.0.0.1:1234/api/likes/?user="
+        let user = "1111"       //현재 로그인한 유저 아이디
+        let doNetwork = Alamofire.request(url+user)
+        doNetwork.responseJSON { (response) in
+            switch response.result{
+            case .success(let obj):
+                if let nsArray = obj as? NSArray{       //array 벗김
+                            for bundle in nsArray {
+                                if let nsDictionary = bundle as? NSDictionary{         //dictionary 벗겨서 튜플에 각 데이터 삽입
+                                    if let like_tattist = nsDictionary["like_tattist"] as? String{
+                                        self.likeArray.append(like_tattist)
+                                    }
+                                }
+                            }
+                        }
+            case .failure(let e):
+                print(e.localizedDescription)
+            }
+        }
+    }
     
     
     //서버에서 타티스트 모든 목록 가져오기
@@ -70,8 +95,8 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
                       for bundle in nsArray{
                           if let nsDictionary = bundle as? NSDictionary{
                               //dictionary 벗겨서 튜플에 각 데이터 삽입
-                              if let tId = nsDictionary["tatt_id"] as? String, let tInfo = nsDictionary["tatt_intro"] as? String, let tPhoto = nsDictionary["tatt_profile"] as? String  {
-                                  self.dataTuple = (tId, tInfo, tPhoto)   //튜플에 데이터삽입
+                              if let tId = nsDictionary["tatt_id"] as? String, let tInfo = nsDictionary["tatt_intro"] as? String, let tPhoto = nsDictionary["tatt_profile"] as? String, let qId = nsDictionary["id"] as? Int  {
+                                  self.dataTuple = (tId, tInfo, tPhoto, qId)   //튜플에 데이터삽입
                               }
                           }
                           
@@ -79,8 +104,6 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
                           self.dataArray.insert(self.dataTuple, at: self.num)
                           self.num += 1
                       }
-                      //컬렉션뷰 데이터 리로드
-                      self.collectionView.reloadData()
                   }
               case .failure(let e):   //통신 실패
                   print(e.localizedDescription)
@@ -90,16 +113,19 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
             self.list = {
                var datalist = [FindTattistVO]()
                 
-                for(tId, tInfo, tPhoto) in self.dataArray{
+                for(tId, tInfo, tPhoto, qId) in self.dataArray{
                     let fvo = FindTattistVO()
                     fvo.profile = tPhoto
                     fvo.tattistId = tId
                     fvo.tattistIntro = tInfo
+                    fvo.id = String(qId)
                     
                     datalist.append(fvo)
                 }
                 return datalist
             }()
+            //컬렉션뷰 데이터 리로드
+            self.collectionView.reloadData()
           }
         self.num=0
       }
@@ -107,7 +133,7 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
     
 
     
-    
+    //MARK: - 컬렉션뷰 셀 설정
     //셀 갯수 설정
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.list.count
@@ -123,7 +149,13 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
         cell.profile.kf.setImage(with: imgURL)
         cell.tattistId?.text = row.tattistId
         cell.tattistIntro?.text = row.tattistIntro
+        cell.likeBtn.tag = indexPath.row
+        cell.likeBtn.addTarget(self, action: #selector(doLike(_:)), for: .touchUpInside)
         
+        //좋아요 배열에 포함되어있다면 버튼 색상 변경
+        if self.likeArray.contains(row.id!){
+            cell.likeBtn.setImage(UIImage(named:"filledHeart.png"), for: .normal)
+        }
         return cell
     }
     
@@ -140,7 +172,29 @@ class FindTattistViewController: UIViewController, UICollectionViewDelegate,UICo
     }
     
     
+    //좋아요 버튼 선택시
+    @objc func doLike(_ sender: UIButton){
+        let data = self.list[sender.tag]
+        var url = "http:127.0.0.1:1234/api/likes/"
+        
+        if !self.likeArray.contains(data.id!){   //안좋아했던 타티스트면
+            sender.setImage(UIImage(named:"filledHeart.png"), for: .normal)
+            let params = [ "user" : "1111", "like_tattist": data.id! ] as [String : Any]
+            Alamofire.request(url, method: .post, parameters: params, encoding: JSONEncoding.default)
+            self.likeArray.append(data.id!)
+        }else{  //좋아했던 타티스트면
+            sender.setImage(UIImage(named:"emptyHeart.png"), for: .normal)
+            url = url + "?user=" + String("1111") + "&like_tattist=" + data.id!
+            Alamofire.request(url, method: .get)
+            if let index = self.likeArray.firstIndex(of: data.id!){
+                          self.likeArray.remove(at: index)
+                          self.collectionView.reloadData()
+                      }
+        }//else
+    }//doLike
     
+    
+    //MARK: - 피커뷰 설정
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }

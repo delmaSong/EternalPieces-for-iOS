@@ -24,10 +24,9 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
     var num:Int = 0
     //컬렉션뷰에 넣어줄 데이터 리스트
     var list: [FindStyleVO] = []
-    
-    
-    //좋아요 선택 여부
-    var likeFlag = false
+
+
+
     var likeArray: [String] = []        //좋아하는 도안 아이디 담을 어레이
     
     override func viewDidLoad() {
@@ -227,6 +226,7 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
     }
 
 
+    //좋아요 버튼 선택시
     @objc func doLike(_ sender: UIButton){
         let data = self.list[sender.tag]
         var url = "http:127.0.0.1:1234/api/likes/"

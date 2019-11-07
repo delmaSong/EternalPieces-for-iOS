@@ -19,4 +19,12 @@ class FindTattistCell: UICollectionViewCell{
     @IBOutlet var tattistIntro: UILabel!
     
     @IBOutlet var likeBtn: UIButton!
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        profile.image = nil
+        tattistId.text = nil
+        tattistIntro.text = nil
+        likeBtn.setImage(UIImage(named:"emptyHeart.png"), for: .normal)
+    }
 }
