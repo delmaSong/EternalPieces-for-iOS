@@ -26,4 +26,5 @@ class FindTattistVO :Codable{
     //시술 장소
     var tatt_addr: String?
     
+    
 }

@@ -68,6 +68,7 @@
                                             </subviews>
                                         </view>
                                         <connections>
+                                            <outlet property="likeBtn" destination="NVW-w9-5if" id="2vC-VB-5MK"/>
                                             <outlet property="profile" destination="zUQ-SL-Hs1" id="nEf-8z-aXw"/>
                                             <outlet property="tattistId" destination="PtC-Bf-dhe" id="IvK-mQ-Tvb"/>
                                             <outlet property="tattistIntro" destination="STs-4e-lVU" id="2KT-Qg-TPr"/>
@@ -859,6 +860,7 @@
                                         <connections>
                                             <outlet property="desc" destination="EUX-hL-GqL" id="UgX-6k-3XU"/>
                                             <outlet property="design" destination="ooJ-uy-r8n" id="x5f-vo-Ghy"/>
+                                            <outlet property="likeBtn" destination="YSi-i4-Sku" id="JJb-pk-mrY"/>
                                             <outlet property="tattistId" destination="tCb-Mc-5zy" id="0bE-UB-o1W"/>
                                         </connections>
                                     </collectionViewCell>

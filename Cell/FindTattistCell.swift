@@ -18,5 +18,5 @@ class FindTattistCell: UICollectionViewCell{
     //타티스트 셀프 간단소개
     @IBOutlet var tattistIntro: UILabel!
     
-    //추후에 좋아요 스위치 버튼 커스터마이징해서 구현해줘야해
+    @IBOutlet var likeBtn: UIButton!
 }

@@ -14,5 +14,14 @@ class FindStyleCell : UICollectionViewCell {
     @IBOutlet var tattistId: UILabel!
    
     @IBOutlet var desc: UITextView!
+    @IBOutlet var likeBtn: UIButton!
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        design.image = nil
+        tattistId.text = nil
+        desc.text = nil
+        likeBtn.setImage(UIImage(named:"emptyHeart.png"), for: .normal)
+    }
     
 }

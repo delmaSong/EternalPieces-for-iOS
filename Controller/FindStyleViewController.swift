@@ -26,11 +26,24 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
     var list: [FindStyleVO] = []
     
     
+    //좋아요 선택 여부
+    var likeFlag = false
+    var likeArray: [String] = []        //좋아하는 도안 아이디 담을 어레이
+    
     override func viewDidLoad() {
+        //도안 스타일에 따른 데이터 가져오기
         getData()
         collectionView.delegate = self
         collectionView.dataSource = self
+        //좋아요 정보 가져오기
+        getLikeData()
+
     }
+    
+    
+    
+    
+    // MARK: - 상단 스타일 버튼 기능 분기
     
     //레터링 버튼 클릭시
     @IBAction func btnLettering(_ sender: Any) {
@@ -45,7 +58,7 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
     @IBAction func btnWaterColor(_ sender: Any) {
         self.dataArray.removeAll()
         self.num = 0
-        
+
         selectedKey = "watercolor"
         getData(selectedKey: selectedKey)
     }
@@ -89,7 +102,31 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
     
     
     
-  
+  //MARK: - 서버에서 데이터 호출
+    //좋아요 데이터 가져오기
+    func getLikeData(){
+        let url = "http:127.0.0.1:1234/api/likes/?user="
+        let user = "1111"       //현재 로그인한 유저 아이디
+        let doNetwork = Alamofire.request(url+user)
+        doNetwork.responseJSON { (response) in
+            switch response.result{
+            case .success(let obj):
+                if let nsArray = obj as? NSArray{       //array 벗김
+                            for bundle in nsArray {
+                                if let nsDictionary = bundle as? NSDictionary{         //dictionary 벗겨서 튜플에 각 데이터 삽입
+                                    if let like_design = nsDictionary["like_design"] as? String{
+                                        self.likeArray.append(like_design)
+                                    }
+                                }
+                            }
+                        }
+            case .failure(let e):
+                print(e.localizedDescription)
+            }
+        }
+    }
+    
+    
     
     //데이터 가져오는 함수 만들어서 viewDidLoad()에서 호출하기
     func getData(selectedKey: String = "lettering"){
@@ -113,8 +150,6 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
                        self.dataArray.insert(self.dataTuple, at: self.num)
                        self.num += 1
                     }
-                    //컬렉션뷰 데이터 리로드
-                    self.collectionView.reloadData()
                 }
             case .failure(let e): //통신 실패
                 print(e.localizedDescription)
@@ -136,13 +171,15 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
 
                   return datalist
               }()
+            //컬렉션뷰 데이터 리로드
+           self.collectionView.reloadData()
         }
     }
     
 
     
     
-
+//MARK: - 컬렉션뷰 설정
     //셀 몇개나 보여줄건지
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
@@ -162,6 +199,14 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
 //        cell.desc?.layer.borderColor = UIColor.gray.cgColor
 //        cell.desc?.layer.borderWidth = 0.5
         cell.desc?.text = row.design_desc
+        cell.likeBtn.tag = indexPath.row
+        cell.likeBtn.addTarget(self, action: #selector(doLike(_:)), for: .touchUpInside)
+        
+
+        //좋아요 배열에 포함되어있다면 버튼 색상 변경
+        if self.likeArray.contains(String(row.design_id!)){
+            cell.likeBtn.setImage(UIImage(named:"filledHeart.png"), for: .normal)
+        }
         return cell
     }
 
@@ -169,7 +214,6 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
     
     //셀 클릭시 이벤트
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        NSLog("선택된 행은 \(indexPath.row)번째 행입니다")
         let row = self.list[indexPath.row]
         
         if let lmc = self.storyboard?.instantiateViewController(withIdentifier: "DesignDetailView") as? DesignDetailController{
@@ -177,13 +221,37 @@ class FindStyleViewController : UIViewController, UICollectionViewDataSource, UI
             
             //도안 id값 전달
             lmc.designId = row.design_id!
-            print("넘어가는 도안 id 값은 \(row.design_id!)")
             self.present(lmc, animated: true)
         }
         
     }
 
 
+    @objc func doLike(_ sender: UIButton){
+        let data = self.list[sender.tag]
+        var url = "http:127.0.0.1:1234/api/likes/"
+        
+        if !self.likeArray.contains(String(data.design_id!)) {  //좋아요 안눌렀던거면
+            sender.setImage(UIImage(named:"filledHeart.png"), for: .normal)
+            //서버에 데이터 보내기
+            let params = [ "user" : "1111", "like_design": String(data.design_id!) ] as [String : Any]
+            Alamofire.request(url, method: .post, parameters: params, encoding: JSONEncoding.default)
+            self.likeArray.append(String(data.design_id!))
+            
+        }else{//좋아요 눌렀었던 거면
+            //유저 아이디값 로그인한 사용자로 변경하기
+            sender.setImage(UIImage(named:"emptyHeart.png"), for: .normal)
+            url = url + "?user=" + String("1111") + "&like_design=" + String(data.design_id!)
+            Alamofire.request(url, method: .get)
+            if let index = self.likeArray.firstIndex(of: String(data.design_id!)){
+                self.likeArray.remove(at: index)
+                self.collectionView.reloadData()
+            }
+        }
+        
+        
+        
+    }
 
 
 
