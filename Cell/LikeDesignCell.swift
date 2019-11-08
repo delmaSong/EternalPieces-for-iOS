@@ -12,4 +12,12 @@ class LikeDesignCell : UICollectionViewCell{
     @IBOutlet var design: UIImageView!
     @IBOutlet var tattistId: UILabel!
     @IBOutlet var decsription: UITextView!
+    @IBOutlet var likeBtn: UIButton!
+    
+    override func prepareForReuse() {
+        design.image = nil
+        tattistId.text = nil
+        decsription.text = nil
+        likeBtn.setImage(UIImage(named:"filledHeart.png"), for: .normal)
+    }
 }

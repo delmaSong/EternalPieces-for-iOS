@@ -12,4 +12,12 @@ class LikeTattistCell : UICollectionViewCell{
     @IBOutlet var profile: UIImageView!
     @IBOutlet var tattistId: UILabel!
     @IBOutlet var tattistIntro: UITextView!
+    @IBOutlet var likeBtn: UIButton!
+    
+    override func prepareForReuse() {
+        profile.image = nil
+        tattistId.text = nil
+        tattistIntro.text = nil
+        likeBtn.setImage(UIImage(named:"filledHeart.png"), for: .normal)
+    }
 }

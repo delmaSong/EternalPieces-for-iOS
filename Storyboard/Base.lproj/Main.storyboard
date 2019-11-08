@@ -356,7 +356,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" image="filledHeart.png"/>
                                                 </button>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Lorem ipsum dolor sit er elit lamet, consectetaur cillium " textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="x0E-Z7-se0">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="Lorem ipsum dolor sit er elit lamet, consectetaur cillium " textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x0E-Z7-se0">
                                                     <rect key="frame" x="8" y="190" width="179" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -373,6 +373,7 @@
                                         <connections>
                                             <outlet property="decsription" destination="x0E-Z7-se0" id="xqc-Ja-oi3"/>
                                             <outlet property="design" destination="Kbj-54-CPo" id="9nU-8q-hqf"/>
+                                            <outlet property="likeBtn" destination="8HE-nb-MtM" id="dmJ-A0-5D1"/>
                                             <outlet property="tattistId" destination="yeA-yH-CLC" id="0Vx-te-kxB"/>
                                         </connections>
                                     </collectionViewCell>
@@ -4222,7 +4223,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" image="filledHeart.png"/>
                                                 </button>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Lorem ipsum dolor sit er elit lamet, consectetaur cillium " textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="JNk-7U-K2N">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="Lorem ipsum dolor sit er elit lamet, consectetaur cillium " textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JNk-7U-K2N">
                                                     <rect key="frame" x="8" y="192" width="179" height="48"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -4232,6 +4233,7 @@
                                             </subviews>
                                         </view>
                                         <connections>
+                                            <outlet property="likeBtn" destination="UgP-wU-s0F" id="EhS-qf-mkG"/>
                                             <outlet property="profile" destination="5LS-Z7-78A" id="N27-CV-j9u"/>
                                             <outlet property="tattistId" destination="VkL-rP-b8I" id="KeC-oe-xWq"/>
                                             <outlet property="tattistIntro" destination="JNk-7U-K2N" id="yEH-uQ-gPo"/>
