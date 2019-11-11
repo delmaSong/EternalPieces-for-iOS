@@ -85,6 +85,7 @@ Version 1.0
 개발환경
 ------
 Swfit4, Xcode, Trello, Git, 서버 [ Django, python, Ubuntu64, Atom, mysql]  
+서버 Github - https://github.com/delmaSong/eternal-pieces-api
 
 정보
 ---
