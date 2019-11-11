@@ -46,36 +46,37 @@ Functions
 - 로그인한 유저는 타티스트와 도안에 각각 좋아요 표시 가능
 - 좋아요 페이지에서 내가 좋아한 항목들 모아서 볼 수 있음 
 
-<img src="https://user-images.githubusercontent.com/40784518/68590751-a4a2d700-04d2-11ea-9830-d39fbab91334.png" width="30%"></img>
+<img src="https://user-images.githubusercontent.com/40784518/68594185-5691d180-04da-11ea-87f3-e5134e7eff4e.png" width="30%"></img>
 
-#### 나의 예약
-- 타투어 : 타투 받기 위한 예약 정보 표시
-- 타티스트 : 타투 받기 위한 예약 정보와 타투 시술 해주기 위한 예약 정보 별도 표시
+#### 예약하기 및 나의 예약 정보
 
-<img src="https://user-images.githubusercontent.com/40784518/68590791-b84e3d80-04d2-11ea-92c1-af2690e912bc.png" width="30%"></img>
-<img src="https://user-images.githubusercontent.com/40784518/68590814-c4d29600-04d2-11ea-9855-4928819d242a.png" width="30%"></img>
-<img src="https://user-images.githubusercontent.com/40784518/68590845-d2881b80-04d2-11ea-92d3-1e40e7495e4b.png" width="30%"></img>
+<img src="https://user-images.githubusercontent.com/40784518/68594855-ca80a980-04db-11ea-9a36-94a628411af6.png" width="30%"></img>
+<img src="https://user-images.githubusercontent.com/40784518/68594849-c81e4f80-04db-11ea-9dcd-8f1ca211167e.png" width="30%"></img>
+<img src="https://user-images.githubusercontent.com/40784518/68594843-c2c10500-04db-11ea-96f3-ffc694fde37e.png" width="30%"></img>
 
 
-#### 마이페이지
+#### 타티스트 페이지
 - 타티스트의 마이페이지. 도안, 시술사진, 후기 정보 조회 가능 
 
-<img src="https://user-images.githubusercontent.com/40784518/68591022-209d1f00-04d3-11ea-8429-ab51900ba862.png" width="30%"></img>
-<img src="https://user-images.githubusercontent.com/40784518/68591029-23980f80-04d3-11ea-9cd7-0f926cda74b1.png" width="30%"></img>
+<img src="https://user-images.githubusercontent.com/40784518/68594982-fac84800-04db-11ea-8187-480a5c2c8f82.png" width="30%"></img>
+<img src="https://user-images.githubusercontent.com/40784518/68594990-fef46580-04db-11ea-9b52-d763715682de.png" width="30%"></img>
+<img src="https://user-images.githubusercontent.com/40784518/68594998-03208300-04dc-11ea-9edd-ee813e6849f1.png" width="30%"></img>
 
 
 #### 도안 / 시술사진 업로드 
 
-<img src="https://user-images.githubusercontent.com/40784518/68591055-33afef00-04d3-11ea-8dc4-6b7a33140266.png" width="30%"></img>
-<img src="https://user-images.githubusercontent.com/40784518/68591050-301c6800-04d3-11ea-83be-6e7c12fe0b63.png" width="30%"></img>
+
+<img src="https://user-images.githubusercontent.com/40784518/68595103-32cf8b00-04dc-11ea-9ecb-a3bef548ac73.png" width="30%"></img>
+<img src="https://user-images.githubusercontent.com/40784518/68595108-36fba880-04dc-11ea-8e38-ec9d204f928d.png" width="30%"></img>
 
 
 
-#### 시술 가능 시간 설정
-- 회원가입시 설정했던 정보를 바탕으로 시술 가능 시간 변경 기능 
+#### 채팅 기능 ... 구현중 
+- 타티스트와 도안 관련 상담 가능한 채팅 기능 
 
-<img src="https://user-images.githubusercontent.com/40784518/68590920-fc414280-04d2-11ea-84a5-e4240034fe75.png" width="30%"></img>
 
+<img src="https://user-images.githubusercontent.com/40784518/68595224-5eeb0c00-04dc-11ea-87ba-5ce40b325aac.png" width="30%"></img>
+<img src="https://user-images.githubusercontent.com/40784518/68595228-61e5fc80-04dc-11ea-822b-c6dd6fbc975f.png" width="30%"></img>
 
 Versioning
 ----------
@@ -83,7 +84,7 @@ Version 1.0
 
 개발환경
 ------
-Java, Android Studio, Trello, Git
+Swfit4, Xcode, Trello, Git, 서버 - Django, python, Ubuntu64, Atom  
 
 정보
 ---
