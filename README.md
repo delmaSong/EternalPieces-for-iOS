@@ -66,10 +66,12 @@ Functions
 <img src="https://user-images.githubusercontent.com/40784518/68594998-03208300-04dc-11ea-9edd-ee813e6849f1.png" width="30%"></img>
 
 
-#### 도안 / 시술사진 업로드 
+#### 도안 / 시술사진 / 후기 업로드 
 - 도안 사진, 이름, 예상 소요시간, 기준 사이즈, 기준 가격, 스타일분류, 도안 소개 정보등을 담아 업로드
 - 해당 스타일 분류에 따라 스타일찾기 페이지에 업로드 됨
 - 동시에 해당 타티스트 마이페이지 [도안]부분에 업로드 
+- 시술사진은 시술 작업 완료된 사진을 업로드
+- 후기는 예약 완료한 유저만 작성 가능. 해당 타티스트 마이페이지 [후기]부분에 업로드
 
 <img src="https://user-images.githubusercontent.com/40784518/68595103-32cf8b00-04dc-11ea-9ecb-a3bef548ac73.png" width="30%"></img>
 <img src="https://user-images.githubusercontent.com/40784518/68595108-36fba880-04dc-11ea-8e38-ec9d204f928d.png" width="30%"></img>
