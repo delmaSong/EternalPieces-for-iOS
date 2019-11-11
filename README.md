@@ -84,7 +84,7 @@ Version 1.0
 
 개발환경
 ------
-Swfit4, Xcode, Trello, Git, 서버 - Django, python, Ubuntu64, Atom  
+Swfit4, Xcode, Trello, Git, 서버 [ Django, python, Ubuntu64, Atom, mysql]  
 
 정보
 ---
