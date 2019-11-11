@@ -49,6 +49,9 @@ Functions
 <img src="https://user-images.githubusercontent.com/40784518/68594185-5691d180-04da-11ea-87f3-e5134e7eff4e.png" width="30%"></img>
 
 #### 예약하기 및 나의 예약 정보
+- 타티스트가 설정한 요일, 시간만 예약 가능
+- 타투어가 시술부위, 사이즈, 시간 선택 및 요청사항 메시지 남김
+- 결제(구현 예정) 완료 후 나의 예약현황 페이지에서 해당 예약정보 확인 가능 
 
 <img src="https://user-images.githubusercontent.com/40784518/68594855-ca80a980-04db-11ea-9a36-94a628411af6.png" width="30%"></img>
 <img src="https://user-images.githubusercontent.com/40784518/68594849-c81e4f80-04db-11ea-9dcd-8f1ca211167e.png" width="30%"></img>
@@ -64,7 +67,9 @@ Functions
 
 
 #### 도안 / 시술사진 업로드 
-
+- 도안 사진, 이름, 예상 소요시간, 기준 사이즈, 기준 가격, 스타일분류, 도안 소개 정보등을 담아 업로드
+- 해당 스타일 분류에 따라 스타일찾기 페이지에 업로드 됨
+- 동시에 해당 타티스트 마이페이지 [도안]부분에 업로드 
 
 <img src="https://user-images.githubusercontent.com/40784518/68595103-32cf8b00-04dc-11ea-9ecb-a3bef548ac73.png" width="30%"></img>
 <img src="https://user-images.githubusercontent.com/40784518/68595108-36fba880-04dc-11ea-8e38-ec9d204f928d.png" width="30%"></img>
@@ -77,6 +82,14 @@ Functions
 
 <img src="https://user-images.githubusercontent.com/40784518/68595224-5eeb0c00-04dc-11ea-87ba-5ce40b325aac.png" width="30%"></img>
 <img src="https://user-images.githubusercontent.com/40784518/68595228-61e5fc80-04dc-11ea-822b-c6dd6fbc975f.png" width="30%"></img>
+
+Libraries
+---------
+- Alamofire
+- Kingfisher
+- SVProgressHUD
+- Firebase
+- Cosmos
 
 Versioning
 ----------
