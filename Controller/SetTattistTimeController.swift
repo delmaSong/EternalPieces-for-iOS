@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import Alamofire
+import SVProgressHUD
+import Firebase
 
 class SetTattistTimeController: UIViewController{
     
@@ -349,54 +351,64 @@ class SetTattistTimeController: UIViewController{
                     self.present(alert2, animated: true, completion: nil)
                 }else{  //회원가입이라면
 
+                    SVProgressHUD.show()
                                //user 테이블에 insert
-                               let join_param = [
-                                   "user_id" : self.paramId,
-                                   "user_pw" : self.paramPwd,
-                                   "role_tatt" : true
-                                   ] as [String : Any]
-                               
-                               let join_url = "http://127.0.0.1:1234/api/login_api/"
-                                Alamofire.request(join_url, method: .post, parameters: join_param, encoding: JSONEncoding.default)
-                               let param = [
-                                   "tatt_time" : times,
-                                  "tatt_id" : self.paramId,
-                                  "tatt_date" : days,
-                                  "tatt_work" : "hi",
-                                  "tatt_addr" : self.paramPlace,
-                                  "tatt_intro" : self.paramIntro,
-                                   ] as [String : Any]
-                    
-                               let imgData = self.paramProfile.jpegData(compressionQuality: 0.7)
-                               
-                               //API 호출
-                             
-                               let url = "http://127.0.0.1:1234/api/join_api/"
-                               Alamofire.upload(multipartFormData: { multipartFormData in
-                                   for (key,value) in param {
-                                       multipartFormData.append((value as! String).data(using: .utf8)!, withName:key)}
-                                   multipartFormData.append(imgData!, withName: "tatt_profile",fileName: "photo.jpg", mimeType: "jpg/png")
-                               }, to: url, encodingCompletion: { encodingResult in
-                                   switch encodingResult {
-                                   case .success(let upload, _, _):
-                                       upload.responseJSON{ response in debugPrint(response)}
-                                   case .failure(let encodingError):
-                                       print(encodingError)
-                                   }
-                               } )//alamofire 닫음
-                               
+//                               let join_param = [
+//                                   "user_id" : self.paramId,
+//                                   "user_pw" : self.paramPwd,
+//                                   "role_tatt" : true
+//                                   ] as [String : Any]
+//
+//                               let join_url = "http://127.0.0.1:1234/api/login_api/"
+//                                Alamofire.request(join_url, method: .post, parameters: join_param, encoding: JSONEncoding.default)
+                    Auth.auth().createUser(withEmail: self.paramId, password: self.paramPwd) { (user, error) in
+                        if error != nil {
+                            print(error!)
+                        }else{
+                            let param = [
+                                           "tatt_time" : times,
+                                          "tatt_id" : self.paramId,
+                                          "tatt_date" : days,
+                                          "tatt_work" : "hi",
+                                          "tatt_addr" : self.paramPlace,
+                                          "tatt_intro" : self.paramIntro,
+                                           ] as [String : Any]
                             
-                               //완료 알림
-                               let alert2 = UIAlertController(title:"", message:"회원가입이 완료되었습니다", preferredStyle: .alert)
+                                       let imgData = self.paramProfile.jpegData(compressionQuality: 0.7)
+                                       
+                                       //API 호출
+                                     
+                                       let url = "http://127.0.0.1:1234/api/join_api/"
+                                       Alamofire.upload(multipartFormData: { multipartFormData in
+                                           for (key,value) in param {
+                                               multipartFormData.append((value as! String).data(using: .utf8)!, withName:key)}
+                                           multipartFormData.append(imgData!, withName: "tatt_profile",fileName: "photo.jpg", mimeType: "jpg/png")
+                                       }, to: url, encodingCompletion: { encodingResult in
+                                           switch encodingResult {
+                                           case .success(let upload, _, _):
+                                               upload.responseJSON{ response in debugPrint(response)}
+                                           case .failure(let encodingError):
+                                               print(encodingError)
+                                           }
+                                       } )//alamofire 닫음
+                                       
+                                    
+                                       //완료 알림
+                                       let alert2 = UIAlertController(title:"", message:"회원가입이 완료되었습니다", preferredStyle: .alert)
+                                       
+                                       let ok2 = UIAlertAction(title: "확인", style: .default){ action in
+                                           if let st = self.storyboard?.instantiateViewController(withIdentifier: "LoginScene"){    //로그인 화면으로 이동
+                                               st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+                                               self.present(st, animated: true)
+                                           }
+                                       }   //ok2
+                            SVProgressHUD.dismiss()
+                                       alert2.addAction(ok2)
+                                       self.present(alert2, animated: true)
+                        }
+                    }
+                    
                                
-                               let ok2 = UIAlertAction(title: "확인", style: .default){ action in
-                                   if let st = self.storyboard?.instantiateViewController(withIdentifier: "LoginScene"){    //로그인 화면으로 이동
-                                       st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
-                                       self.present(st, animated: true)
-                                   }
-                               }   //ok2
-                               alert2.addAction(ok2)
-                               self.present(alert2, animated: true)
                 }//if
                 
             }   //ok

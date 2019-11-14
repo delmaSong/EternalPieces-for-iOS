@@ -189,6 +189,7 @@ class UploadReviewController: UIViewController, UIImagePickerControllerDelegate,
 //                st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
 //
 //                self.present(st, animated: true)
+            self.dismiss(animated: true)
             }
 
         alert.addAction(ok)
