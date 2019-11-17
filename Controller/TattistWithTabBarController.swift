@@ -146,7 +146,7 @@ class TattistWithTabBarController: UITabBarController, UIImagePickerControllerDe
         
         self.btnChat.layer.cornerRadius = 8
         self.btnChat.sizeToFit()
-        
+        self.btnChat.addTarget(self, action: #selector(goToChat(_:)), for: .touchUpInside)
         self.view.addSubview(btnChat)
         
         
@@ -227,6 +227,14 @@ class TattistWithTabBarController: UITabBarController, UIImagePickerControllerDe
         self.presentingViewController?.dismiss(animated: true)
     }
     
+    @objc func goToChat(_ sender: UIButton){
+        if let st = self.storyboard?.instantiateViewController(withIdentifier: "ChatRoom") as? ChatController{
+            
+            st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+            st.reciever = self.lblId.text!
+            self.present(st, animated: true)
+        }
+    }
     
     //MARK: - 서버와 호출
     //서버에서 데이터 가져오기

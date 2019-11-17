@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class ViewController: UIViewController {
 
@@ -14,9 +15,15 @@ class ViewController: UIViewController {
     @IBOutlet var findStyle: UIButton!
     @IBOutlet var findTattist: UIButton!
     
+    @IBOutlet var loginBtn: UIButton!
+    @IBOutlet var joinBtn: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        if let user = Auth.auth().currentUser{  //로그인된 상태면 버튼 숨김
+            loginBtn.isHidden = true
+            joinBtn.isHidden = true
+        }
     }
 
     @IBAction func gotoMain(_segue: UIStoryboardSegue){

@@ -14,5 +14,13 @@ class ChatCell: UITableViewCell{
     @IBOutlet var msg: UILabel!
     //발신 시간
     @IBOutlet var time: UILabel!
+    @IBOutlet var sender: UILabel!
+    @IBOutlet var msgBackground: UIView!
+    
+}
+
+class DestinationCell: UITableViewCell{
+    @IBOutlet var msg: UILabel!
+    @IBOutlet var time: UILabel!
     
 }

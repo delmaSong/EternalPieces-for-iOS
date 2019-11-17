@@ -7,11 +7,26 @@
 //
 
 import UIKit
+import Firebase
+
 class SettingController: UIViewController{
     
     
+    @IBOutlet var joinBtn: UIButton!
+    @IBOutlet var loginBtn: UIButton!
+    var loginFlag = false
+    
+    override func viewDidLoad() {
+        if let user = Auth.auth().currentUser {
+           joinBtn.isHidden = true
+          loginBtn.setTitle("로그아웃", for: .normal)
+            loginFlag = true
+       }
+    }
+    
     //마이페이지로 이동
     @IBAction func goMypage(_ sender: Any) {
+       
     }
     
     //시술 가능 시간 설정 페이지로 이동
@@ -37,11 +52,28 @@ class SettingController: UIViewController{
     
     //로그인 페이지로 이동
     @IBAction func goLogin(_ sender: Any) {
-        if let lmc = self.storyboard?.instantiateViewController(withIdentifier: "LoginScene") as? LoginController{
-            
-            lmc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
-            
-            self.present(lmc, animated: true)
+        if loginFlag {  //로그인 한 상태면
+            do{
+                try Auth.auth().signOut()
+                loginFlag = false
+                let alert = UIAlertController(title:"알림", message: "로그아웃 되었습니다", preferredStyle: .alert)
+                let ok = UIAlertAction(title:"확인", style: .default){
+                    (action) in
+                    if let lmc = self.storyboard?.instantiateViewController(withIdentifier: "MainView") as? ViewController{
+                                       lmc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+                                       self.present(lmc, animated: true)
+                                   }
+                }
+                alert.addAction(ok)
+                self.present(alert, animated: true)
+            }catch let e as NSError {
+                print(e.localizedDescription)
+            }
+        }else { //로그인 안한 상태면
+            if let lmc = self.storyboard?.instantiateViewController(withIdentifier: "LoginScene") as? LoginController{
+                lmc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+                self.present(lmc, animated: true)
+            }
         }
     }
     //회원가입 페이지로 이동
