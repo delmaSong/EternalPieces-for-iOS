@@ -9,13 +9,14 @@
 
 import Foundation
 
-class ChatVO{
+class ChatVO: Codable{
     //발신자
-    var receiver: String?
+    var reciever: String?
     //수신자
     var sender: String?
     //메시지
     var msg: String?
     //발신 시간
     var time: String?
+   
 }

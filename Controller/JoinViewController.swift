@@ -18,6 +18,7 @@ class JoinViewController: UIViewController, UITextFieldDelegate{
     @IBOutlet var joinId: UITextField!
     @IBOutlet var joinPwd: UITextField!
     @IBOutlet var joinPwd2: UITextField!
+    @IBOutlet var nickName: UITextField!
     
     
     @IBOutlet var isTattist: UISwitch!
@@ -71,7 +72,7 @@ class JoinViewController: UIViewController, UITextFieldDelegate{
     @IBAction func onSubmit(_ sender: Any) {
         //이메일 형식 검사 필요
         //항목 미입력시
-        if self.joinId.text == "" || self.joinPwd.text == "" || self.joinPwd2.text == "" {
+        if self.joinId.text == "" || self.joinPwd.text == "" || self.joinPwd2.text == "" || self.nickName.text == "" {
             let alert = UIAlertController(title:"Alert!", message: "항목을 모두 입력해주세요", preferredStyle: UIAlertController.Style.alert)
            let defaultAction = UIAlertAction(title: "OK", style: .default) {(action) in}
             alert.addAction(defaultAction)
@@ -112,11 +113,13 @@ class JoinViewController: UIViewController, UITextFieldDelegate{
 //            Alamofire.request(url, method: .post, parameters: param, encoding: JSONEncoding.default)
             
             SVProgressHUD.show()
-            
             Auth.auth().createUser(withEmail: self.joinId.text!, password: self.joinPwd.text!) { (user, error) in
+                let uid = user?.user.uid
                 if error != nil {
                     print(error!)
                 }else{
+                    
+                    Database.database().reference().child("users").child(uid!).setValue(["nick" : self.nickName.text!])
                     SVProgressHUD.dismiss()
                     let alert = UIAlertController(title:"Alert!", message: "회원가입이 완료되었습니다 :)", preferredStyle: UIAlertController.Style.alert)
                       let defaultAction = UIAlertAction(title: "OK", style: .default) {
@@ -134,7 +137,7 @@ class JoinViewController: UIViewController, UITextFieldDelegate{
         //모든 항목 입력 && 타투이스트
         }else if self.joinId.text != "" && self.joinPwd.text == self.joinPwd2.text && tattistFlag == true{
             if let st = self.storyboard?.instantiateViewController(withIdentifier: "SetTattistInfo") as? SetTattistInfoController{
-                st.paramId = self.joinId.text!
+                st.paramId = self.nickName.text!
                 st.paramPwd = self.joinPwd.text!
                 
                 st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
