@@ -64,7 +64,6 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
         let db = Database.database().reference().child("users").child(self.uid!)
 
         db.queryOrdered(byChild: "entry/"+self.reciever).queryEqual(toValue: true).observeSingleEvent(of: .value) { (snapshot) in
-            print("snapshot is \(snapshot)")
             if snapshot.hasChildren() { //누구든지와 채팅 한번은 했을 때
                 print("has children~~")
                 //상대방과 함께한 채팅룸 있으면 가져옴
