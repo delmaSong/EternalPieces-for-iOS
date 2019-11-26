@@ -23,6 +23,7 @@ class SetTattistTimeController: UIViewController{
     var paramProfile: UIImage!
     var paramIntro: String = ""
     var paramPlace: String = ""
+    var paramNick: String = ""
     
     var availableDay = Array<String>()
     var availableTime = Array<String>()
@@ -367,7 +368,7 @@ class SetTattistTimeController: UIViewController{
                         }else{
                             let param = [
                                            "tatt_time" : times,
-                                          "tatt_id" : self.paramId,
+                                          "tatt_id" : self.paramNick,
                                           "tatt_date" : days,
                                           "tatt_work" : "hi",
                                           "tatt_addr" : self.paramPlace,

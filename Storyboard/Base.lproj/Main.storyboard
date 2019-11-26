@@ -1964,7 +1964,7 @@
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="doSend:" destination="PHd-gV-lIA" eventType="touchUpInside" id="6KG-J0-Dx4"/>
+                                    <action selector="sendMsg:" destination="PHd-gV-lIA" eventType="touchUpInside" id="G1K-r4-G3G"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vod-WD-ovB">

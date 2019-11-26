@@ -25,6 +25,7 @@ class SetTattistInfoController: UIViewController, UIImagePickerControllerDelegat
     //앞 화면에서 보낸 값 받기 위한 변수
     var paramId: String = ""
     var paramPwd: String = ""
+    var paramNick: String = ""
    
     
     @IBOutlet var pickBig: UIPickerView!
@@ -177,6 +178,7 @@ class SetTattistInfoController: UIViewController, UIImagePickerControllerDelegat
                 st.paramProfile = self.sendImg!
                 st.paramIntro = self.introText.text!
                 st.paramPlace = self.selectedBig + self.selectedSmall + self.adrsText.text!
+                st.paramNick = self.paramNick
                 
                 self.present(st, animated: true)
             }

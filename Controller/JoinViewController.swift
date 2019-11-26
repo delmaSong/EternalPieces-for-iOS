@@ -137,8 +137,9 @@ class JoinViewController: UIViewController, UITextFieldDelegate{
         //모든 항목 입력 && 타투이스트
         }else if self.joinId.text != "" && self.joinPwd.text == self.joinPwd2.text && tattistFlag == true{
             if let st = self.storyboard?.instantiateViewController(withIdentifier: "SetTattistInfo") as? SetTattistInfoController{
-                st.paramId = self.nickName.text!
+                st.paramId = self.joinId.text!      //email
                 st.paramPwd = self.joinPwd.text!
+                st.paramNick = self.nickName.text!
                 
                 st.modalTransitionStyle = UIModalTransitionStyle.coverVertical
                 
