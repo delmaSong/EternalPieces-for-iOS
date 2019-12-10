@@ -9,6 +9,8 @@ Eternal Pieces for iOS
 > '영원한 조각들'이라는 의미로 영원히 몸에 새겨지는 타투를 의미
 
 
+<img src="https://user-images.githubusercontent.com/40784518/70524024-a8845080-1b87-11ea-90b9-70b3cd555737.jpg" width="30%"></img>
+
 
 Functions
 ---------
