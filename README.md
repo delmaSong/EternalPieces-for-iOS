@@ -108,6 +108,5 @@ Swfit4, Xcode, Trello, Git, 서버 [ Django, python, Ubuntu64, Atom, mysql]
 
 정보
 ---
-Email - sdy2856@gmail.com
 Github - https://github.com/delmaSong
 
